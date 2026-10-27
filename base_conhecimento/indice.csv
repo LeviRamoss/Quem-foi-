@@ -1,0 +1,25 @@
+id,tipo,titulo,arquivo,origem,ficticio
+p01,personagem,Helena Valverde,personagens/p01-helena-valverde.md,criado pelo grupo Mentalistas,sim
+p02,personagem,Marcos Teles,personagens/p02-marcos-teles.md,criado pelo grupo Mentalistas,sim
+p03,personagem,Rita Moura,personagens/p03-rita-moura.md,criado pelo grupo Mentalistas,sim
+p04,personagem,Otávio Brandão,personagens/p04-otavio-brandao.md,criado pelo grupo Mentalistas,sim
+p05,personagem,Bruno Valverde,personagens/p05-bruno-valverde.md,criado pelo grupo Mentalistas,sim
+p06,personagem,Clara Siqueira,personagens/p06-clara-siqueira.md,criado pelo grupo Mentalistas,sim
+p07,personagem,Jonas Arruda,personagens/p07-jonas-arruda.md,criado pelo grupo Mentalistas,sim
+p08,personagem,Lívia Prado,personagens/p08-livia-prado.md,criado pelo grupo Mentalistas,sim
+l01,local,Biblioteca,locais/l01-biblioteca.md,criado pelo grupo Mentalistas,sim
+l02,local,Cozinha,locais/l02-cozinha.md,criado pelo grupo Mentalistas,sim
+l03,local,Jardim,locais/l03-jardim.md,criado pelo grupo Mentalistas,sim
+l04,local,Sala de Estar,locais/l04-sala-de-estar.md,criado pelo grupo Mentalistas,sim
+l05,local,Escritório,locais/l05-escritorio.md,criado pelo grupo Mentalistas,sim
+l06,local,Adega,locais/l06-adega.md,criado pelo grupo Mentalistas,sim
+a01,arma,Veneno,armas/a01-veneno.md,criado pelo grupo Mentalistas,sim
+a02,arma,Faca,armas/a02-faca.md,criado pelo grupo Mentalistas,sim
+a03,arma,Corda,armas/a03-corda.md,criado pelo grupo Mentalistas,sim
+a04,arma,Revólver,armas/a04-revolver.md,criado pelo grupo Mentalistas,sim
+a05,arma,Castiçal,armas/a05-castical.md,criado pelo grupo Mentalistas,sim
+a06,arma,Tesoura de poda,armas/a06-tesoura-de-poda.md,criado pelo grupo Mentalistas,sim
+g01,guia,Regras do jogo,guias/g01-regras-do-jogo.md,criado pelo grupo Mentalistas,sim
+g02,guia,Guia para escrever pistas,guias/g02-guia-para-escrever-pistas.md,criado pelo grupo Mentalistas,sim
+g03,guia,Tom e classificação,guias/g03-tom-e-classificacao.md,criado pelo grupo Mentalistas,sim
+g04,guia,Formato do caso (JSON),guias/g04-formato-do-caso-json.md,criado pelo grupo Mentalistas,sim

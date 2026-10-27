@@ -1,0 +1,8 @@
+anthropic
+chromadb
+sentence-transformers
+python-constraint
+z3-solver
+pygame-ce
+pygame_gui
+pyinstaller
