@@ -7,13 +7,14 @@ ficticio: true
 
 # Formato do caso (JSON)
 
-O LLM devolve um único objeto JSON com estes campos:
+O LLM devolve um único objeto JSON no formato 2, igual ao de `dados/casos/caso_exemplo.json`:
 
-- `id`, `titulo`, `enredo` (até 120 palavras)
-- `solucao`: `culpado`, `arma`, `local` (vêm do sorteio e não podem mudar)
-- `suspeitos`, `armas`, `locais`: listas com 5 nomes cada, iguais às sorteadas
-- `cenas`: uma por local, com `descricao` e ids das pistas
-- `pistas`: `id`, `texto` e `fato` estruturado (ver guia de pistas)
-- `depoimentos`: `suspeito`, `pergunta`, `resposta`, `verdade` (true ou false) e `fato`
+- `formato`: sempre 2. `id`, `titulo`, `vitima` (`nome`, `descricao`), `horario_do_crime` e `enredo` (até 120 palavras).
+- `solucao`: `culpado`, `arma` e `comodo`. Vêm do sorteio e não podem mudar.
+- `suspeitos` (5 ids), `armas` (5 ids) e `comodos` (os 6 ids): iguais aos enviados no pedido.
+- `pistas`: 12 itens, 2 por cômodo, cada um com `id`, `comodo`, `texto` e `fatos` (lista, pode ser vazia).
+- `respostas`: para cada suspeito, um objeto com as perguntas `q01` a `q10`. Cada resposta tem `texto` (1 ou 2 frases, no jeito de falar do personagem), `verdade` (true ou false) e `fato` (um fato ou null).
 
-Qualquer campo faltando ou nome fora das listas faz o caso ser rejeitado.
+Use sempre os ids (`p04`, `a01`, `l01`) nos campos estruturados e os nomes só nos textos.
+
+Qualquer campo faltando, id fora das listas ou caso reprovado pelo validador faz o caso ser descartado.

@@ -37,12 +37,15 @@ A chave da API fica só na fábrica de casos (`.env` e credenciais do n8n). O jo
 
 | Pasta | Conteúdo |
 | --- | --- |
+| `dados/` | Dados do jogo: personagens, armas, cômodos, tabuleiro, perguntas, detetives, paleta e `casos/` |
 | `base_conhecimento/` | 24 documentos fictícios do RAG e o `indice.csv` |
-| `fabrica/` | Indexação, gerador de casos e validador |
+| `fabrica/` | Indexação, gerador de casos e validador (`validar.py`) |
 | `n8n/` | Fluxos exportados do n8n |
 | `fine_tuning/` | Notebook e resultados do experimento |
 | `jogo/` | Jogo em Pygame-CE |
-| `docs/` | Entregas, diagramas e imagens |
+| `docs/` | [Regras oficiais](docs/regras.md), [formato do caso](docs/formato_caso.md), entregas e imagens |
+
+Para conferir um caso: `python fabrica/validar.py dados/casos/caso_exemplo.json`
 
 ## Como rodar (a partir da semana 1)
 
@@ -58,6 +61,6 @@ python jogo/main.py               # abre o jogo
 
 1. **Gerar:** base no ChromaDB, gerador e solver por linha de comando.
 2. **Automatizar:** fluxo no n8n com registro na planilha e 30 casos aprovados.
-3. **Jogar:** jogo com 1 mansão, palpites, Cartada Final, vidas, pontos e `.exe`.
+3. **Jogar:** tabuleiro de 11 × 9 casas, dado, até 3 jogadores, palpites, Cartada Final, vidas, pontos e `.exe`.
 
 Todos os dados do projeto são fictícios e foram criados pelo grupo.

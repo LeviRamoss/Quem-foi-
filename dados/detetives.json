@@ -1,0 +1,20 @@
+[
+  {
+    "id": "d1",
+    "cor": "vermelho",
+    "hex": "#D4404C",
+    "ordem_padrao": 1
+  },
+  {
+    "id": "d2",
+    "cor": "azul",
+    "hex": "#4A7FD4",
+    "ordem_padrao": 2
+  },
+  {
+    "id": "d3",
+    "cor": "verde",
+    "hex": "#4FAE6A",
+    "ordem_padrao": 3
+  }
+]

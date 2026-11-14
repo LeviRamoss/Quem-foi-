@@ -1,0 +1,58 @@
+{
+  "largura": 11,
+  "altura": 9,
+  "tamanho_casa_px": 64,
+  "legenda": "Coordenadas (col, lin) começando em 0 no canto de cima à esquerda. A porta é a casa de corredor colada ao cômodo.",
+  "saguao": {
+    "area": {
+      "col": 4,
+      "lin": 4,
+      "largura": 3,
+      "altura": 1
+    },
+    "saidas": [
+      {
+        "col": 3,
+        "lin": 4
+      },
+      {
+        "col": 7,
+        "lin": 4
+      }
+    ],
+    "regra": "Os 3 detetives começam aqui. É o único lugar onde mais de um peão pode ficar."
+  },
+  "comodos": [
+    "l01",
+    "l05",
+    "l06",
+    "l02",
+    "l04",
+    "l03"
+  ],
+  "mapa": [
+    "BBB.EEE.AAA",
+    "BBB.EEE.AAA",
+    "BBB.EEE.AAA",
+    "...........",
+    "....###....",
+    "...........",
+    "CCC.SSS.JJJ",
+    "CCC.SSS.JJJ",
+    "CCC.SSS.JJJ"
+  ],
+  "legenda_mapa": {
+    ".": "corredor",
+    "#": "saguão",
+    "B": "l01",
+    "E": "l05",
+    "A": "l06",
+    "C": "l02",
+    "S": "l04",
+    "J": "l03"
+  },
+  "dado": {
+    "faces": 6,
+    "regra": "Anda até o número que saiu, sem diagonal e sem passar por casa ocupada."
+  }
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "p01",
+    "nome": "Helena Valverde",
+    "papel": "Viúva do anfitrião",
+    "idade": 52,
+    "perfil": "Casada há 25 anos com Augusto Valverde, dono da mansão. Calma e controlada, raramente levanta a voz.",
+    "motivo": "Esconde dívidas de jogo que Augusto descobriu na semana do jantar.",
+    "habitos": "Lê na biblioteca depois do jantar e toca piano para as visitas. Usa um perfume de jasmim.",
+    "relacoes": "Não suporta Bruno. Confia em Rita. Desconfia de Clara.",
+    "jeito_de_falar": "Formal e educada, frases curtas.",
+    "visual": "Mulher de 52 anos, cabelo grisalho preso em coque, vestido verde-escuro, colar de pérolas."
+  },
+  {
+    "id": "p02",
+    "nome": "Marcos Teles",
+    "papel": "Sócio da construtora",
+    "idade": 48,
+    "perfil": "Sócio de Augusto na Valverde & Teles. Ambicioso, fala rápido e interrompe os outros.",
+    "motivo": "Augusto queria desfazer a sociedade e ficar com a empresa.",
+    "habitos": "Fuma charuto no jardim e deixa cinza e pontas por onde passa.",
+    "relacoes": "Amigo de longa data de Lívia. Discute com Augusto em público.",
+    "jeito_de_falar": "Rápido, impaciente, fala de dinheiro.",
+    "visual": "Homem de 48 anos, terno risca de giz cinza, bigode, charuto na mão."
+  },
+  {
+    "id": "p03",
+    "nome": "Rita Moura",
+    "papel": "Governanta",
+    "idade": 61,
+    "perfil": "Trabalha na mansão há 20 anos e conhece cada canto da casa.",
+    "motivo": "Ficou fora do testamento, apesar de uma promessa de Augusto.",
+    "habitos": "Carrega o molho com a chave de todos os cômodos e sabe quem entra e sai de cada um.",
+    "relacoes": "Leal a Helena. Trata Jonas como filho.",
+    "jeito_de_falar": "Direta, detalhista, sempre cita horários.",
+    "visual": "Mulher de 61 anos, cabelo branco curto, uniforme preto com avental branco, molho de chaves na cintura."
+  },
+  {
+    "id": "p04",
+    "nome": "Otávio Brandão",
+    "papel": "Médico da família",
+    "idade": 57,
+    "perfil": "Atende os Valverde há 15 anos. Fica nervoso sob pressão e repete as frases.",
+    "motivo": "Augusto sabia de um erro médico que poderia acabar com a carreira dele.",
+    "habitos": "Leva sempre uma maleta com remédios e frascos.",
+    "relacoes": "Discreto com todos. Evita ficar sozinho com Marcos.",
+    "jeito_de_falar": "Hesitante, repete palavras, usa termos médicos.",
+    "visual": "Homem de 57 anos, óculos redondos, colete marrom, maleta de couro de médico."
+  },
+  {
+    "id": "p05",
+    "nome": "Bruno Valverde",
+    "papel": "Sobrinho e herdeiro",
+    "idade": 26,
+    "perfil": "Sobrinho de Augusto e principal herdeiro. Impulsivo e cheio de dívidas.",
+    "motivo": "Precisa da herança para pagar credores que o ameaçam.",
+    "habitos": "Passa muito tempo na adega e volta com as mãos sujas de pó das garrafas.",
+    "relacoes": "Briga com Helena por causa da herança. Pede dinheiro a Lívia.",
+    "jeito_de_falar": "Informal, defensivo, exagera.",
+    "visual": "Homem de 26 anos, cabelo bagunçado, camisa social amassada sem gravata, jaqueta de couro."
+  },
+  {
+    "id": "p06",
+    "nome": "Clara Siqueira",
+    "papel": "Jornalista",
+    "idade": 34,
+    "perfil": "Convidada para escrever a biografia de Augusto. Observadora e curiosa.",
+    "motivo": "Descobriu um escândalo na construtora e queria publicar antes do livro.",
+    "habitos": "Anota tudo num caderno de capa vermelha, com horários exatos.",
+    "relacoes": "Entrevistou todos os convidados. Marcos tenta evitá-la.",
+    "jeito_de_falar": "Curiosa, faz perguntas de volta, precisa.",
+    "visual": "Mulher de 34 anos, cabelo ruivo curto, boina, blazer bege, caderno vermelho na mão."
+  },
+  {
+    "id": "p07",
+    "nome": "Jonas Arruda",
+    "papel": "Jardineiro",
+    "idade": 40,
+    "perfil": "Cuida do jardim há oito anos. Calado e observador.",
+    "motivo": "Foi demitido por Augusto na semana anterior ao jantar.",
+    "habitos": "Conhece as plantas venenosas do jardim e as ferramentas do galpão. Botas sempre sujas de lama.",
+    "relacoes": "Protegido por Rita. Viu Marcos e Augusto discutindo no jardim.",
+    "jeito_de_falar": "Poucas palavras, simples.",
+    "visual": "Homem de 40 anos, chapéu de palha, macacão verde, botas de borracha com lama."
+  },
+  {
+    "id": "p08",
+    "nome": "Lívia Prado",
+    "papel": "Advogada da família",
+    "idade": 45,
+    "perfil": "Cuida dos contratos e do testamento dos Valverde. Meticulosa e fria.",
+    "motivo": "Desviou dinheiro do inventário de um parente de Augusto.",
+    "habitos": "Guarda o testamento no escritório. Usa luvas de couro quando sai.",
+    "relacoes": "Aliada de Marcos nos negócios. Recebe pedidos de dinheiro de Bruno.",
+    "jeito_de_falar": "Fria, precisa, fala como em tribunal.",
+    "visual": "Mulher de 45 anos, cabelo preto liso na altura do queixo, tailleur azul-marinho, luvas de couro."
+  }
+]

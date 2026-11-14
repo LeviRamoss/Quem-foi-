@@ -1,0 +1,52 @@
+[
+  {
+    "id": "q01",
+    "texto": "Onde você estava na hora do crime?",
+    "tipo": "alibi"
+  },
+  {
+    "id": "q02",
+    "texto": "Você viu alguém andando pela casa durante a noite?",
+    "tipo": "testemunho"
+  },
+  {
+    "id": "q03",
+    "texto": "Qual era a sua relação com a vítima?",
+    "tipo": "relacao"
+  },
+  {
+    "id": "q04",
+    "texto": "Quem teria motivo para fazer isso?",
+    "tipo": "motivo"
+  },
+  {
+    "id": "q05",
+    "texto": "Você ouviu algum barulho estranho?",
+    "tipo": "testemunho"
+  },
+  {
+    "id": "q06",
+    "texto": "Alguém pode confirmar onde você estava?",
+    "tipo": "alibi"
+  },
+  {
+    "id": "q07",
+    "texto": "O que você fez logo depois do jantar?",
+    "tipo": "alibi"
+  },
+  {
+    "id": "q08",
+    "texto": "Você notou algum objeto fora do lugar?",
+    "tipo": "objeto"
+  },
+  {
+    "id": "q09",
+    "texto": "De quem você desconfia?",
+    "tipo": "opiniao"
+  },
+  {
+    "id": "q10",
+    "texto": "Por que alguém poderia suspeitar de você?",
+    "tipo": "defesa"
+  }
+]

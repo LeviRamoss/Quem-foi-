@@ -1,0 +1,56 @@
+[
+  {
+    "id": "a01",
+    "nome": "Veneno",
+    "descricao": "Frasco pequeno sem rótulo.",
+    "onde_fica": "Maleta do médico ou estufa do jardim.",
+    "vestigios": "Copo com resíduo, sintomas sem ferimento aparente.",
+    "pista_que_descarta": "O frasco está cheio e lacrado.",
+    "visual": "Frasco de vidro escuro pequeno, sem rótulo, com rolha."
+  },
+  {
+    "id": "a02",
+    "nome": "Faca",
+    "descricao": "Faca de cozinha de cabo de madeira.",
+    "onde_fica": "Cepo da cozinha.",
+    "vestigios": "Espaço vazio no cepo, faca lavada fora de hora.",
+    "pista_que_descarta": "A faca está limpa e no lugar.",
+    "visual": "Faca de chef com cabo de madeira escura."
+  },
+  {
+    "id": "a03",
+    "nome": "Corda",
+    "descricao": "Corda grossa de sisal.",
+    "onde_fica": "Galpão de ferramentas do jardim.",
+    "vestigios": "Fibras de sisal na roupa, marcas nas mãos.",
+    "pista_que_descarta": "A corda está enrolada no gancho do galpão.",
+    "visual": "Rolo de corda grossa de sisal, cor palha."
+  },
+  {
+    "id": "a04",
+    "nome": "Revólver",
+    "descricao": "Revólver calibre .38 antigo, de coleção.",
+    "onde_fica": "Cofre do escritório.",
+    "vestigios": "Cofre aberto, cheiro de pólvora, cápsula no chão.",
+    "pista_que_descarta": "O revólver está descarregado e trancado no cofre.",
+    "visual": "Revólver antigo de cano curto, metal escurecido, cabo de madeira."
+  },
+  {
+    "id": "a05",
+    "nome": "Castiçal",
+    "descricao": "Castiçal pesado de prata.",
+    "onde_fica": "Aparador da sala de estar.",
+    "vestigios": "Marca de cera no tapete, castiçal fora do par.",
+    "pista_que_descarta": "Os dois castiçais estão no aparador, com pó intacto.",
+    "visual": "Castiçal de prata de três braços, com vela apagada."
+  },
+  {
+    "id": "a06",
+    "nome": "Tesoura de poda",
+    "descricao": "Tesoura grande de jardinagem.",
+    "onde_fica": "Galpão de ferramentas do jardim.",
+    "vestigios": "Ferramenta faltando no galpão, terra na lâmina.",
+    "pista_que_descarta": "A tesoura está no galpão, com a terra seca da manhã.",
+    "visual": "Tesoura de poda grande com cabos vermelhos."
+  }
+]
