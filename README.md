@@ -14,7 +14,7 @@ Jogos de mistério acabam quando o caso é resolvido, e as escolas têm poucas f
 
 De 1 a 3 jogadores, no mesmo computador, são detetives numa mansão. Revezando a vez, cada um joga o dado, anda pelo tabuleiro, coleta pistas e interroga suspeitos para descobrir **quem foi, com que arma e em que cômodo**.
 
-- **Palpite:** só dentro de um cômodo e sobre esse cômodo. Errado custa 1 das 5 vidas, e o jogo mostra um item errado.
+- **Palpite:** só dentro de um cômodo e sobre esse cômodo. O jogo mostra só para quem palpitou o que acertou e o que errou. Se errou algo, perde 1 das 5 vidas.
 - **Cartada Final:** acusar tudo de uma vez, na sua vez. Errou, está eliminado.
 - **Pontos:** quem vence ganha 100, +20 por vida restante e +50 pela Cartada Final certa.
 
