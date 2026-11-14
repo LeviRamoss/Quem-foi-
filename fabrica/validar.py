@@ -68,6 +68,14 @@ def validar(caso):
     if sol["culpado"] not in sus or sol["arma"] not in arm or sol["comodo"] not in com:
         erros.append("a solução usa um item fora das listas do caso")
 
+    # 1b. A abertura não pode entregar o cômodo nem a arma
+    nomes_c = {c["id"]: c["nome"] for c in carregar("comodos.json")}
+    nomes_a = {a["id"]: a["nome"] for a in carregar("armas.json")}
+    abertura = (caso.get("enredo", "") + " " + caso.get("titulo", "")).lower()
+    for nome in list(nomes_c.values()) + [nomes_a[a] for a in arm if a in nomes_a]:
+        if nome.lower() in abertura:
+            erros.append(f"a abertura ou o título entrega uma resposta: cita '{nome}'")
+
     # 2. Pistas: 2 por cômodo, só com itens do caso
     for c in com:
         n = sum(1 for p in caso["pistas"] if p["comodo"] == c)

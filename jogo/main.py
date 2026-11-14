@@ -18,11 +18,15 @@ from regras import (DADOS, SAGUAO, Jogador, Partida, Tabuleiro, carregar_json, c
 
 RAIZ = Path(__file__).resolve().parent
 ASSETS = RAIZ / "assets"
+sys.path.insert(0, str(RAIZ.parent / "fabrica"))
+import gerador_local  # noqa: E402  (casos novos sem internet)
 
-LARGURA, ALTURA = 1280, 720
+LARGURA, ALTURA = 1600, 900   # a janela se ajusta ao monitor (F11 = tela cheia)
 FPS = 60
-BX, BY = 288, 72          # canto do tabuleiro na tela
-CASA = 64
+CASA = 88                     # tamanho de cada casa do tabuleiro
+TAB_L, TAB_A = 11 * CASA, 9 * CASA
+BX, BY = 316, 70              # canto do tabuleiro na tela
+PX = BX + TAB_L + 16          # coluna da direita
 
 PAL = {k: pygame.Color(v) for k, v in carregar_json(DADOS / "paleta.json").items()}
 BRANCO_SUAVE = PAL["texto"]
@@ -138,15 +142,15 @@ class Jogo:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("Quem Foi?")
-        self.tela = pygame.display.set_mode((LARGURA, ALTURA))
+        self.tela = pygame.display.set_mode((LARGURA, ALTURA), pygame.SCALED | pygame.RESIZABLE)
         self.relogio = pygame.time.Clock()
         self.img = Imagens()
-        self.f_titulo = fonte("titulo", 34, True)
-        self.f_sub = fonte("titulo", 22, True)
-        self.f_txt = fonte("texto", 18)
-        self.f_peq = fonte("texto", 15)
-        self.f_btn = fonte("texto", 17, True)
-        self.f_maq = fonte("maquina", 16)
+        self.f_titulo = fonte("titulo", 42, True)
+        self.f_sub = fonte("titulo", 26, True)
+        self.f_txt = fonte("texto", 21)
+        self.f_peq = fonte("texto", 17)
+        self.f_btn = fonte("texto", 19, True)
+        self.f_maq = fonte("maquina", 18)
 
         self.personagens = {p["id"]: p for p in carregar_json(DADOS / "personagens.json")}
         self.armas = {a["id"]: a for a in carregar_json(DADOS / "armas.json")}
@@ -154,8 +158,7 @@ class Jogo:
         self.perguntas = {q["id"]: q for q in carregar_json(DADOS / "perguntas.json")}
         self.detetives = carregar_json(DADOS / "detetives.json")
         self.tabuleiro = Tabuleiro.padrao()
-        self.casos = sorted((DADOS / "casos").glob("*.json"))
-        self.indice_caso = 0
+        self.ultima_solucao = None
         self.rng = random.Random()
 
         # tela de início
@@ -199,8 +202,9 @@ class Jogo:
         self.cena = "ordem"
 
     def novo_caso(self):
-        caso = carregar_json(self.casos[self.indice_caso % len(self.casos)])
-        self.indice_caso += 1
+        # caso novo a cada vez: outro culpado, outra arma e outro cômodo
+        caso = gerador_local.gerar_caso(self.rng, evitar=self.ultima_solucao)
+        self.ultima_solucao = {**caso["solucao"], "titulo": caso["titulo"]}
         for j in self.jogadores:
             j.posicao, j.vidas, j.eliminado = SAGUAO, 5, False
             j.caderno, j.pistas_vistas, j.respostas_ouvidas = {}, [], []
@@ -222,14 +226,14 @@ class Jogo:
     def centro_lugar(self, lugar, indice=0):
         if lugar == SAGUAO:
             r = self.rect_saguao()
-            return (r.left + 32 + indice * 64, r.centery)
+            return (r.left + CASA // 2 + indice * CASA, r.centery)
         if lugar[0] == "comodo":
             return self.rect_comodo(lugar[1]).center
         return self.rect_casa(lugar[1], lugar[2]).center
 
     def lugar_na_tela(self, pos):
         x, y = pos[0] - BX, pos[1] - BY
-        if not (0 <= x < 11 * CASA and 0 <= y < 9 * CASA):
+        if not (0 <= x < TAB_L and 0 <= y < TAB_A):
             return None
         col, lin = x // CASA, y // CASA
         for cid in self.comodos:
@@ -241,6 +245,9 @@ class Jogo:
 
     # ------------------------------------------------------------------ eventos
     def evento(self, ev):
+        if ev.type == pygame.KEYDOWN and ev.key == pygame.K_F11:
+            pygame.display.toggle_fullscreen()
+            return
         if self.cena == "inicio":
             self.evento_inicio(ev)
             return
@@ -359,74 +366,74 @@ class Jogo:
 
     # ------------------------------------------------------------------ início
     def rect_campo(self, i):
-        return pygame.Rect(LARGURA // 2 - 160 + 70, 330 + i * 64, 260, 44)
+        return pygame.Rect(LARGURA // 2 - 110, 400 + i * 72, 320, 50)
 
     def desenhar_inicio(self):
         cx = LARGURA // 2
         t = self.f_titulo.render("QUEM", True, BRANCO_SUAVE)
         t2 = self.f_titulo.render("FOI?", True, PAL["vermelho"])
         larg = t.get_width() + 14 + t2.get_width()
-        self.tela.blit(t, (cx - larg // 2, 110))
-        self.tela.blit(t2, (cx - larg // 2 + t.get_width() + 14, 110))
-        escrever(self.tela, "Um jogo de dedução para até 3 detetives", self.f_txt, CINZA, (cx, 160), centro=True)
-        escrever(self.tela, "Quantos jogadores?", self.f_sub, PAL["dourado"], (cx, 220), centro=True)
+        self.tela.blit(t, (cx - larg // 2, 140))
+        self.tela.blit(t2, (cx - larg // 2 + t.get_width() + 14, 140))
+        escrever(self.tela, "Um jogo de dedução para até 3 detetives", self.f_txt, CINZA, (cx, 205), centro=True)
+        escrever(self.tela, "Quantos jogadores?", self.f_sub, PAL["dourado"], (cx, 270), centro=True)
         for n in (1, 2, 3):
             sel = n == self.n_jogadores
-            self.botoes.append(Botao((cx - 120 + (n - 1) * 84, 258, 72, 44), str(n),
+            self.botoes.append(Botao((cx - 126 + (n - 1) * 90, 314, 72, 48), str(n),
                                      lambda n=n: setattr(self, "n_jogadores", n),
                                      cor=PAL["sangue"] if sel else None))
         for i in range(self.n_jogadores):
             d = self.detetives[i]
             r = self.rect_campo(i)
-            self.tela.blit(self.img.escala(self.img.peoes[d["id"]], (40, 40)), (r.left - 56, r.top + 2))
+            self.tela.blit(self.img.escala(self.img.peoes[d["id"]], (46, 46)), (r.left - 60, r.top + 2))
             pygame.draw.rect(self.tela, PAL["painel"], r, border_radius=8)
             borda = PAL["dourado_claro"] if self.campo_ativo == i else PAL["linha"]
             pygame.draw.rect(self.tela, borda, r, 2, border_radius=8)
             txt = self.nomes[i] + ("|" if self.campo_ativo == i and pygame.time.get_ticks() // 500 % 2 else "")
             escrever(self.tela, txt or " ", self.f_txt, BRANCO_SUAVE, (r.left + 12, r.top + 10))
-        self.botoes.append(Botao((cx - 110, 560, 220, 52), "Começar", self.comecar, cor=PAL["sangue"]))
-        escrever(self.tela, "Clique num nome para trocar. Todos jogam no mesmo computador.",
-                 self.f_peq, CINZA, (cx, 630), centro=True)
+        self.botoes.append(Botao((cx - 120, 650, 240, 56), "Começar", self.comecar, cor=PAL["sangue"]))
+        escrever(self.tela, "Clique num nome para trocar. Todos jogam no mesmo computador. F11: tela cheia.",
+                 self.f_peq, CINZA, (cx, 730), centro=True)
 
     # ------------------------------------------------------------------ ordem inicial
     def desenhar_ordem(self):
         cx = LARGURA // 2
-        escrever(self.tela, "Quem começa?", self.f_titulo, BRANCO_SUAVE, (cx, 110), centro=True)
-        y = 190
+        escrever(self.tela, "Quem começa?", self.f_titulo, BRANCO_SUAVE, (cx, 140), centro=True)
+        y = 230
         for i, rodada in enumerate(self.rodadas_ordem):
             txt = "  ·  ".join(f"{nome}: {v}" for nome, v in rodada.items())
             escrever(self.tela, ("Desempate — " if i else "Dados — ") + txt, self.f_txt, CINZA, (cx, y), centro=True)
             y += 34
         y += 20
         for i, j in enumerate(self.jogadores):
-            self.tela.blit(self.img.escala(self.img.retratos_det[j.peao], (96, 96)), (cx - 260 + i * 180, y))
-            escrever(self.tela, f"{i + 1}º  {j.nome}", self.f_sub, pygame.Color(j.hex), (cx - 212 + i * 180, y + 104), centro=True)
-        self.botoes.append(Botao((cx - 110, 560, 220, 52), "Abrir o caso", self.novo_caso, cor=PAL["sangue"]))
+            self.tela.blit(self.img.escala(self.img.retratos_det[j.peao], (130, 130)), (cx - 335 + i * 240, y))
+            escrever(self.tela, f"{i + 1}º  {j.nome}", self.f_sub, pygame.Color(j.hex), (cx - 270 + i * 240, y + 140), centro=True)
+        self.botoes.append(Botao((cx - 120, 680, 240, 56), "Abrir o caso", self.novo_caso, cor=PAL["sangue"]))
 
     # ------------------------------------------------------------------ capa da vez (privacidade)
     def desenhar_capa(self):
         cx = LARGURA // 2
         if self.modal and self.modal.get("tipo") == "abertura":
             c = self.partida.caso
-            escrever(self.tela, "UM NOVO CASO", self.f_maq, PAL["dourado"], (cx, 120), centro=True)
-            escrever(self.tela, c["titulo"], self.f_titulo, BRANCO_SUAVE, (cx, 150), centro=True)
-            escrever(self.tela, c["enredo"], self.f_txt, CINZA, (cx - 340, 230), largura=680, entrelinha=6)
+            escrever(self.tela, "UM NOVO CASO", self.f_maq, PAL["dourado"], (cx, 170), centro=True)
+            escrever(self.tela, c["titulo"], self.f_titulo, BRANCO_SUAVE, (cx, 205), centro=True)
+            escrever(self.tela, c["enredo"], self.f_txt, CINZA, (cx - 420, 300), largura=840, entrelinha=8)
             escrever(self.tela, f"Vítima: {c['vitima']['nome']}  ·  Horário: {c['horario_do_crime']}",
-                     self.f_peq, PAL["dourado_claro"], (cx, 420), centro=True)
+                     self.f_peq, PAL["dourado_claro"], (cx, 520), centro=True)
 
             def fechar():
                 self.modal = None
-            self.botoes.append(Botao((cx - 110, 560, 220, 52), "Investigar", fechar, cor=PAL["sangue"]))
+            self.botoes.append(Botao((cx - 120, 660, 240, 56), "Investigar", fechar, cor=PAL["sangue"]))
             return
         j = self.partida.jogador
-        self.tela.blit(self.img.escala(self.img.retratos_det[j.peao], (160, 160)), (cx - 80, 170))
-        escrever(self.tela, f"Vez de {j.nome}", self.f_titulo, pygame.Color(j.hex), (cx, 360), centro=True)
-        escrever(self.tela, "Os outros detetives, olhem para o lado.", self.f_txt, CINZA, (cx, 410), centro=True)
+        self.tela.blit(self.img.escala(self.img.retratos_det[j.peao], (192, 192)), (cx - 96, 190))
+        escrever(self.tela, f"Vez de {j.nome}", self.f_titulo, pygame.Color(j.hex), (cx, 420), centro=True)
+        escrever(self.tela, "Os outros detetives, olhem para o lado.", self.f_txt, CINZA, (cx, 480), centro=True)
 
         def entrar():
             self.cena = "jogo"
             self.aviso = "Jogue o dado ou use a Cartada Final."
-        self.botoes.append(Botao((cx - 130, 470, 260, 52), "Clique para começar", entrar, cor=PAL["sangue"]))
+        self.botoes.append(Botao((cx - 150, 560, 300, 56), "Clique para começar", entrar, cor=PAL["sangue"]))
 
     # ------------------------------------------------------------------ tela principal
     def desenhar_jogo(self):
@@ -440,20 +447,20 @@ class Jogo:
             face = self.img.dado[self.anim["face"]]
             ang = (self.anim["t"] * 720) % 360
             img = pygame.transform.rotozoom(face, ang, 1.0 + 0.25 * abs((self.anim["t"] % 0.3) - 0.15) / 0.15)
-            self.tela.blit(img, img.get_rect(center=(BX + 352, BY + 288)))
+            self.tela.blit(img, img.get_rect(center=(BX + TAB_L // 2, BY + TAB_A // 2)))
         elif p.dado and p.estado in (Partida.MOVER, Partida.AGIR):
-            self.tela.blit(self.img.escala(self.img.dado[p.dado], (56, 56)), (BX + 704 - 64, 8))
+            self.tela.blit(self.img.escala(self.img.dado[p.dado], (58, 58)), (BX + TAB_L - 62, 6))
         if self.modal:
             self.desenhar_modal()
 
     def desenhar_topo(self, j):
-        escrever(self.tela, self.partida.caso["titulo"], self.f_sub, BRANCO_SUAVE, (BX, 20))
-        self.tela.blit(self.img.escala(self.img.peoes[j.peao], (36, 36)), (24, 16))
-        escrever(self.tela, j.nome, self.f_sub, pygame.Color(j.hex), (68, 20))
-        x = 1000
+        escrever(self.tela, self.partida.caso["titulo"], self.f_sub, BRANCO_SUAVE, (BX, 6))
+        escrever(self.tela, self.aviso, self.f_peq, PAL["dourado_claro"], (BX, 40), largura=TAB_L - 90, entrelinha=0)
+        self.tela.blit(self.img.escala(self.img.peoes[j.peao], (42, 42)), (20, 14))
+        escrever(self.tela, j.nome, self.f_sub, pygame.Color(j.hex), (70, 18))
         for i in range(5):
-            self.tela.blit(self.img.vida_cheia if i < j.vidas else self.img.vida_vazia, (x + i * 30, 12))
-        escrever(self.tela, f"{j.pontos} pontos", self.f_peq, PAL["dourado_claro"], (x, 42))
+            self.tela.blit(self.img.vida_cheia if i < j.vidas else self.img.vida_vazia, (PX + i * 32, 10))
+        escrever(self.tela, f"{j.pontos} pontos", self.f_peq, PAL["dourado_claro"], (PX, 42))
 
     def desenhar_tabuleiro(self):
         p = self.partida
@@ -493,36 +500,36 @@ class Jogo:
             peao = self.img.peoes[jog.peao]
             self.tela.blit(peao, peao.get_rect(center=centro))
             if jog is p.jogador:
-                pygame.draw.circle(self.tela, BRANCO_SUAVE, (int(centro[0]), int(centro[1])), 27, 2)
+                pygame.draw.circle(self.tela, BRANCO_SUAVE, (int(centro[0]), int(centro[1])), 37, 3)
 
     def desenhar_caderno(self, j):
         caso = self.partida.caso
         # esquerda: suspeitos
-        r = pygame.Rect(16, BY, 256, 576)
+        r = pygame.Rect(16, BY, BX - 32, TAB_A)
         painel(self.tela, r, borda=PAL["linha"])
         escrever(self.tela, "SUSPEITOS", self.f_maq, PAL["dourado"], (r.left + 14, r.top + 12))
         for i, sid in enumerate(caso["suspeitos"]):
-            y = r.top + 46 + i * 104
-            self.tela.blit(self.img.escala(self.img.suspeitos[sid], (84, 84)), (r.left + 12, y))
+            y = r.top + 48 + i * 148
+            self.tela.blit(self.img.escala(self.img.suspeitos[sid], (110, 110)), (r.left + 10, y))
             per = self.personagens[sid]
             cor = CINZA if j.caderno.get(sid) == "errado" else BRANCO_SUAVE
-            y2 = escrever(self.tela, per["nome"], self.f_txt, cor, (r.left + 104, y + 14), largura=140, entrelinha=0)
-            escrever(self.tela, per["papel"], self.f_peq, CINZA, (r.left + 104, y2 + 2), largura=140, entrelinha=0)
-            self.marca(j.caderno.get(sid), (r.left + 12, y), 84)
+            y2 = escrever(self.tela, per["nome"], self.f_txt, cor, (r.left + 130, y + 18), largura=r.width - 140, entrelinha=0)
+            escrever(self.tela, per["papel"], self.f_peq, CINZA, (r.left + 130, y2 + 4), largura=r.width - 140, entrelinha=0)
+            self.marca(j.caderno.get(sid), (r.left + 10, y), 110)
         # direita: armas e cômodos
-        r = pygame.Rect(BX + 704 + 16, BY, LARGURA - (BX + 704 + 32), 576)
+        r = pygame.Rect(PX, BY, LARGURA - PX - 16, TAB_A)
         painel(self.tela, r, borda=PAL["linha"])
         escrever(self.tela, "ARMAS", self.f_maq, PAL["dourado"], (r.left + 14, r.top + 12))
         for i, aid in enumerate(caso["armas"]):
-            y = r.top + 40 + i * 52
-            self.tela.blit(self.img.escala(self.img.armas[aid], (44, 44)), (r.left + 12, y))
+            y = r.top + 42 + i * 50
+            self.tela.blit(self.img.escala(self.img.armas[aid], (46, 46)), (r.left + 12, y))
             cor = CINZA if j.caderno.get(aid) == "errado" else BRANCO_SUAVE
             escrever(self.tela, self.armas[aid]["nome"], self.f_txt, cor, (r.left + 66, y + 10))
             self.marca(j.caderno.get(aid), (r.left + 12, y), 44)
-        y0 = r.top + 312
+        y0 = r.top + 300
         escrever(self.tela, "CÔMODOS", self.f_maq, PAL["dourado"], (r.left + 14, y0))
         for i, cid in enumerate(caso["comodos"]):
-            y = y0 + 30 + i * 38
+            y = y0 + 30 + i * 31
             cor = CINZA if j.caderno.get(cid) == "errado" else BRANCO_SUAVE
             escrever(self.tela, self.comodos[cid]["nome"], self.f_txt, cor, (r.left + 40, y + 4))
             self.marca(j.caderno.get(cid), (r.left + 10, y + 2), 24)
@@ -536,28 +543,26 @@ class Jogo:
             pygame.draw.circle(self.tela, PAL["dourado_claro"], (pos[0] + tam // 2, pos[1] + tam // 2), tam // 2, 3)
 
     def desenhar_acoes(self):
-        p = self.partida
-        y = BY + 576 + 12
-        escrever(self.tela, self.aviso, self.f_peq, PAL["dourado_claro"], (BX, y + 4), largura=420, entrelinha=2)
+        """Botões empilhados no pé da coluna da direita."""
         if self.modal or self.anim:
             return
-        x = BX + 704 + 16
-        largura = LARGURA - x - 16
+        p = self.partida
+        botoes = []
         if p.estado == Partida.ROLAR:
-            self.botoes.append(Botao((x, y, largura, 40), "Jogar o dado", self.jogar_dado, cor=PAL["sangue"]))
-        else:
-            no_comodo = p.jogador.no_comodo
-            if no_comodo:
-                self.botoes.append(Botao((16, y, 120, 40), "Pistas", lambda: self.abrir_pistas(no_comodo)))
-            self.botoes.append(Botao((x, y, largura, 40), "Encerrar a vez", self.encerrar_vez, cor=PAL["linha"],
-                                     ativo=p.estado == Partida.AGIR))
-        self.botoes.append(Botao((152, y, 120, 40), "Cartada Final", self.abrir_cartada, cor=PAL["sangue"],
-                                 ativo=p.estado in (Partida.ROLAR, Partida.AGIR)))
+            botoes.append(("Jogar o dado", self.jogar_dado, PAL["sangue"], True))
         if p.estado == Partida.AGIR and p.jogador.no_comodo:
-            self.botoes.append(Botao((BX + 440, y, 124, 40), "Interrogar", self.abrir_interrogatorio,
-                                     ativo=p.pode_interrogar))
-            self.botoes.append(Botao((BX + 576, y, 128, 40), "Palpite", self.abrir_palpite,
-                                     ativo=p.pode_palpitar))
+            cid = p.jogador.no_comodo
+            botoes.append(("Ver as pistas", lambda: self.abrir_pistas(cid), None, True))
+            botoes.append(("Interrogar", self.abrir_interrogatorio, None, p.pode_interrogar))
+            botoes.append(("Palpite", self.abrir_palpite, None, p.pode_palpitar))
+        botoes.append(("Cartada Final", self.abrir_cartada, PAL["sangue"], p.estado in (Partida.ROLAR, Partida.AGIR)))
+        if p.estado != Partida.ROLAR:
+            botoes.append(("Encerrar a vez", self.encerrar_vez, PAL["linha"], p.estado == Partida.AGIR))
+        largura = LARGURA - PX - 32
+        y = BY + TAB_A - 12 - len(botoes) * 48
+        for texto, acao, cor, ativo in botoes:
+            self.botoes.append(Botao((PX + 8, y, largura, 42), texto, acao, cor=cor, ativo=ativo))
+            y += 48
 
     # ------------------------------------------------------------------ janelas (modais)
     def desenhar_modal(self):
@@ -579,14 +584,14 @@ class Jogo:
 
     def modal_pistas(self):
         cid = self.modal["comodo"]
-        r = self.caixa(820, 430, f"Você está {self.no_na(cid)}")
-        self.tela.blit(self.img.escala(self.img.comodos[cid], (288, 288)), (r.left + 28, r.top + 70))
-        y = r.top + 74
-        escrever(self.tela, "PISTAS QUE VOCÊ ENCONTROU", self.f_maq, PAL["dourado"], (r.left + 340, y))
+        r = self.caixa(960, 480, f"Você está {self.no_na(cid)}")
+        self.tela.blit(self.img.escala(self.img.comodos[cid], (330, 330)), (r.left + 28, r.top + 72))
+        y = r.top + 76
+        escrever(self.tela, "PISTAS QUE VOCÊ ENCONTROU", self.f_maq, PAL["dourado"], (r.left + 384, y))
         y += 32
         for pista in self.partida.pistas_do_comodo(cid):
-            self.tela.blit(self.img.lupa, (r.left + 336, y))
-            y = escrever(self.tela, pista["texto"], self.f_txt, BRANCO_SUAVE, (r.left + 380, y + 4), largura=410) + 16
+            self.tela.blit(self.img.lupa, (r.left + 380, y))
+            y = escrever(self.tela, pista["texto"], self.f_txt, BRANCO_SUAVE, (r.left + 426, y + 4), largura=500) + 18
         self.botoes.append(Botao((r.right - 200, r.bottom - 64, 172, 44), "Continuar", self.fechar_modal, cor=PAL["sangue"]))
 
     def grade_escolha(self, r, y, ids, imagens, chave, tam=72, nomes=None):
@@ -608,18 +613,18 @@ class Jogo:
 
     def modal_interrogar(self):
         m = self.modal
-        r = self.caixa(860, 500, "Interrogatório: escolha um suspeito e uma pergunta")
+        r = self.caixa(980, 580, "Interrogatório: escolha um suspeito e uma pergunta")
         if m["resposta"]:
             per = self.personagens[m["suspeito"]]
-            self.tela.blit(self.img.escala(self.img.suspeitos[m["suspeito"]], (140, 140)), (r.left + 32, r.top + 90))
-            escrever(self.tela, per["nome"], self.f_sub, BRANCO_SUAVE, (r.left + 200, r.top + 92))
-            escrever(self.tela, self.perguntas[m["pergunta"]]["texto"], self.f_txt, CINZA, (r.left + 200, r.top + 130), largura=620)
-            escrever(self.tela, f"“{m['resposta']}”", self.f_sub, PAL["dourado_claro"], (r.left + 200, r.top + 190), largura=620, entrelinha=8)
+            self.tela.blit(self.img.escala(self.img.suspeitos[m["suspeito"]], (170, 170)), (r.left + 32, r.top + 90))
+            escrever(self.tela, per["nome"], self.f_sub, BRANCO_SUAVE, (r.left + 230, r.top + 92))
+            escrever(self.tela, self.perguntas[m["pergunta"]]["texto"], self.f_txt, CINZA, (r.left + 230, r.top + 134), largura=700)
+            escrever(self.tela, f"“{m['resposta']}”", self.f_sub, PAL["dourado_claro"], (r.left + 230, r.top + 200), largura=700, entrelinha=8)
             self.botoes.append(Botao((r.right - 200, r.bottom - 64, 172, 44), "Continuar", self.fechar_modal, cor=PAL["sangue"]))
             return
         sus = self.partida.caso["suspeitos"]
-        self.grade_escolha(r, r.top + 70, sus, self.img.suspeitos, "suspeito", 90, self.nomes_suspeitos())
-        y = r.top + 230
+        self.grade_escolha(r, r.top + 70, sus, self.img.suspeitos, "suspeito", 100, self.nomes_suspeitos())
+        y = r.top + 250
         escrever(self.tela, "PERGUNTAS SORTEADAS", self.f_maq, PAL["dourado"], (r.left + 28, y))
         for i, q in enumerate(m["perguntas"]):
             def perguntar(q=q):
@@ -628,7 +633,7 @@ class Jogo:
                     return
                 m["pergunta"] = q["id"]
                 m["resposta"] = self.partida.interrogar(m["suspeito"], q["id"])
-            self.botoes.append(Botao((r.left + 28, y + 30 + i * 56, r.width - 56, 46), q["texto"], perguntar,
+            self.botoes.append(Botao((r.left + 28, y + 32 + i * 60, r.width - 56, 50), q["texto"], perguntar,
                                      ativo=m["suspeito"] is not None))
         self.botoes.append(Botao((r.left + 28, r.bottom - 60, 140, 40), "Voltar", self.fechar_modal))
 
@@ -639,7 +644,7 @@ class Jogo:
         if m["resultado"]:
             self.resultado_palpite(m["resultado"], m["suspeito"], m["arma"], cid)
             return
-        r = self.caixa(860, 520, f"Palpite: quem foi, e com o quê, aqui {self.no_na(cid)}?")
+        r = self.caixa(940, 560, f"Palpite: quem foi, e com o quê, aqui {self.no_na(cid)}?")
         escrever(self.tela, "QUEM FOI", self.f_maq, PAL["dourado"], (r.left + 28, r.top + 66))
         self.grade_escolha(r, r.top + 90, p.caso["suspeitos"], self.img.suspeitos, "suspeito", 80, self.nomes_suspeitos())
         escrever(self.tela, "COM QUE ARMA", self.f_maq, PAL["dourado"], (r.left + 28, r.top + 232))
@@ -655,7 +660,7 @@ class Jogo:
                                  cor=PAL["sangue"], ativo=bool(m["suspeito"] and m["arma"])))
 
     def resultado_palpite(self, res, sid, aid, cid):
-        r = self.caixa(700, 400, "Resultado do palpite (só você está vendo)")
+        r = self.caixa(780, 440, "Resultado do palpite (só você está vendo)")
         linhas = [(self.comodos[cid]["nome"], res.comodo), (self.personagens[sid]["nome"], res.suspeito),
                   (self.armas[aid]["nome"], res.arma)]
         for i, (nome, ok) in enumerate(linhas):
@@ -684,7 +689,7 @@ class Jogo:
                      (r.left + 28, r.top + 100))
             self.botoes.append(Botao((r.right - 220, r.bottom - 64, 192, 44), "Continuar", self.encerrar_vez, cor=PAL["sangue"]))
             return
-        r = self.caixa(900, 640, "Cartada Final: quem, com o quê e onde", borda=PAL["vermelho"])
+        r = self.caixa(960, 700, "Cartada Final: quem, com o quê e onde", borda=PAL["vermelho"])
         self.grade_escolha(r, r.top + 64, p.caso["suspeitos"], self.img.suspeitos, "suspeito", 76, self.nomes_suspeitos())
         self.grade_escolha(r, r.top + 196, p.caso["armas"], self.img.armas, "arma", 76,
                            {a: self.armas[a]["nome"] for a in p.caso["armas"]})
@@ -704,7 +709,7 @@ class Jogo:
         s = p.solucao
         venc = p.vencedor
         titulo = "Parabéns! Caso resolvido" if venc else "Caso encerrado"
-        r = self.caixa(820, 520, titulo, borda=PAL["dourado_claro"])
+        r = self.caixa(900, 560, titulo, borda=PAL["dourado_claro"])
         if venc:
             escrever(self.tela, f"{venc.nome} desvendou o mistério e soma {venc.pontos} pontos.",
                      self.f_txt, pygame.Color(venc.hex), (r.left + 28, r.top + 62))
@@ -714,14 +719,14 @@ class Jogo:
                  (self.img.armas[s["arma"]], self.armas[s["arma"]]["nome"]),
                  (self.img.comodos[s["comodo"]], self.comodos[s["comodo"]]["nome"])]
         for i, (im, nome) in enumerate(itens):
-            x = r.left + 90 + i * 230
-            self.tela.blit(self.img.escala(im, (140, 140)), (x, r.top + 110))
-            escrever(self.tela, nome, self.f_sub, BRANCO_SUAVE, (x + 70, r.top + 262), centro=True)
+            x = r.left + 100 + i * 260
+            self.tela.blit(self.img.escala(im, (160, 160)), (x, r.top + 110))
+            escrever(self.tela, nome, self.f_sub, BRANCO_SUAVE, (x + 80, r.top + 282), centro=True)
         mentiras = [q for q, resp in p.caso["respostas"][s["culpado"]].items() if not resp["verdade"]]
         escrever(self.tela, f"{self.personagens[s['culpado']]['nome'].split()[0]} mentiu {len(mentiras)} vezes no interrogatório.",
-                 self.f_txt, CINZA, (r.left + 28, r.top + 316))
+                 self.f_txt, CINZA, (r.left + 28, r.top + 340))
         placar = "   ".join(f"{j.nome}: {j.pontos}" for j in self.jogadores)
-        escrever(self.tela, "Placar — " + placar, self.f_txt, PAL["dourado_claro"], (r.left + 28, r.top + 350))
+        escrever(self.tela, "Placar — " + placar, self.f_txt, PAL["dourado_claro"], (r.left + 28, r.top + 378))
 
         def proximo():
             self.modal = None

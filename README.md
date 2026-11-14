@@ -49,12 +49,14 @@ Para conferir um caso: `python fabrica/validar.py dados/casos/caso_exemplo.json`
 
 ## Como rodar
 
-**Jogo** (já jogável com o caso de exemplo):
+**Jogo** (já jogável, com um caso novo a cada partida):
 
 ```bash
 pip install pygame-ce
 python jogo/main.py
 ```
+
+A janela se ajusta ao monitor. **F11** liga e desliga a tela cheia.
 
 **Testes das regras:** `python -m unittest discover testes` · **Roteiro dos QAs:** [docs/roteiro_testes.md](docs/roteiro_testes.md)
 

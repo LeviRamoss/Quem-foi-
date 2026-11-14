@@ -44,7 +44,13 @@ Rode `python fabrica/validar.py dados/casos/<arquivo>.json`. O caso só é aprov
 5. Cada suspeito responder às 10 perguntas.
 6. Só o culpado mentir, pelo menos uma vez, e cada mentira tiver um fato **contradito por alguma pista**.
 
-A regra 4 garante que quem visitar os 6 cômodos sempre consegue resolver o caso. O interrogatório ajuda a chegar mais rápido.
+7. A abertura e o título não citarem nenhum cômodo nem nenhuma arma do caso.
+
+A regra 4 garante que quem visitar os 6 cômodos sempre consegue resolver o caso. O interrogatório ajuda a chegar mais rápido. A regra 7 mantém o mistério: quem lê a abertura não descobre onde foi nem com o quê.
+
+## De onde vêm os casos hoje
+
+Enquanto a fábrica com IA não está ligada, o jogo usa o **gerador local** (`fabrica/gerador_local.py`). A cada caso ele sorteia 5 suspeitos, 5 armas e a solução, monta as pistas e as respostas com modelos de texto e passa tudo pelo validador. O culpado, a arma, o cômodo e o título nunca se repetem de um caso para o seguinte. Para ver um caso sorteado: `python fabrica/gerador_local.py`.
 
 ## Como o jogo usa o caso
 

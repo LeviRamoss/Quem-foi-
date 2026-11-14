@@ -7,7 +7,7 @@
     "descricao": "Dono da mansão e da construtora Valverde & Teles, 60 anos."
   },
   "horario_do_crime": "entre 21h30 e 22h",
-  "enredo": "Augusto Valverde reuniu a família e os amigos para um jantar na mansão. Depois da sobremesa, cada um foi para um canto da casa. Às 22h, Rita encontrou Augusto sem vida na poltrona da biblioteca, com um copo de licor ao lado. As portas da mansão estavam trancadas: o culpado ainda está aqui dentro.",
+  "enredo": "Durante o jantar de aniversário de Augusto Valverde, uma tempestade derrubou a energia às 21h30. Quando as luzes voltaram, Augusto não estava mais entre os convidados. Pouco depois das 22h, foi encontrado sem vida. As portas estavam trancadas por dentro e a estrada está alagada. O culpado ainda está aqui.",
   "solucao": {
     "culpado": "p04",
     "arma": "a01",

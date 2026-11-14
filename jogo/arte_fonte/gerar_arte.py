@@ -16,9 +16,11 @@ MADEIRA = "#2A2118"; MADEIRA2 = "#3A2D1F"; PEDRA = "#23262D"; SILH = "#05060A"
 assets = {}  # caminho relativo -> (svg, largura, altura)
 
 
-def add(path, w, h, body, defs=""):
-    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><defs>{defs}</defs>{body}</svg>'
-    assets[path] = (svg, w, h)
+def add(path, w, h, body, defs="", render=None):
+    """w, h = tamanho do desenho; render = tamanho do PNG final (o SVG escala sem borrar)."""
+    rw, rh = render or (w, h)
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{rw}" height="{rh}" viewBox="0 0 {w} {h}"><defs>{defs}</defs>{body}</svg>'
+    assets[path] = (svg, rw, rh)
 
 
 # ---------------------------------------------------------------- padrões de piso
@@ -107,7 +109,7 @@ MOVEIS = {
    + ''.join(f'<ellipse cx="{x}" cy="{y}" rx="3" ry="5" fill="#6B5A3E" opacity=".9"/>' for x, y in [(78, 96), (86, 110), (80, 124)])),
 }
 for cid, (piso, moveis) in MOVEIS.items():
-    add(f"comodos/{cid}.png", 192, 192, comodo(piso, moveis), PADROES)
+    add(f"comodos/{cid}.png", 192, 192, comodo(piso, moveis), PADROES, render=(384, 384))
 
 
 # ---------------------------------------------------------------- tabuleiro completo 704x576 (11x9 casas de 64px)
@@ -138,7 +140,7 @@ for cid, (col, lin) in portas.items():
     d = f"M{cx-8} {cy+3}L{cx} {cy-6}L{cx+8} {cy+3}" if cima else f"M{cx-8} {cy-3}L{cx} {cy+6}L{cx+8} {cy-3}"
     corpo += f'<path d="{d}" fill="none" stroke="{OURO}" stroke-width="2.5" opacity=".7"/>'
 corpo += f'<rect x="1" y="1" width="702" height="574" fill="none" stroke="#6A6658" stroke-width="2"/>'
-add("tabuleiro.png", 704, 576, corpo, PADROES)
+add("tabuleiro.png", 704, 576, corpo, PADROES, render=(968, 792))  # casas de 88px
 
 
 # ---------------------------------------------------------------- retratos (160x160): silhueta noir + detalhe de cada um
@@ -176,7 +178,7 @@ EXTRAS = {
  "p08": f'<path d="M94 134c6-10 16-12 22-6l-4 14h-16z" fill="#2B1F14" stroke="{OURO}" stroke-width="1.5"/>',  # luvas
 }
 for pid in RETRATOS:
-    add(f"suspeitos/{pid}.png", 160, 160, retrato(RETRATOS[pid], EXTRAS[pid]), DEF_R)
+    add(f"suspeitos/{pid}.png", 160, 160, retrato(RETRATOS[pid], EXTRAS[pid]), DEF_R, render=(192, 192))
 
 # detetives: retrato com chapéu fedora e gola de sobretudo, borda na cor do peão
 DET = {"d1": VERM, "d2": AZUL, "d3": VERDE}
@@ -184,13 +186,13 @@ fedora = ('<path d="M54 54h52l-6-20c-8-4-32-4-40 0z" fill="#05060A"/><ellipse cx
           '<path d="M30 170l20-56 30 26 30-26 20 56z" fill="#0A0C12" stroke="#2C3240" stroke-width="2"/>')
 for did, cor in DET.items():
     add(f"detetives/{did}_retrato.png", 160, 160,
-        retrato(cab + fedora, f'<rect x="54" y="48" width="52" height="5" fill="{cor}"/>', borda=cor), DEF_R)
+        retrato(cab + fedora, f'<rect x="54" y="48" width="52" height="5" fill="{cor}"/>', borda=cor), DEF_R, render=(192, 192))
     # peão visto de cima: ficha com chapéu
     add(f"detetives/{did}_peao.png", 48, 48,
         f'<circle cx="24" cy="26" r="20" fill="#000" opacity=".45"/>'
         f'<circle cx="24" cy="24" r="20" fill="{cor}" stroke="{TXT}" stroke-width="2"/>'
         f'<circle cx="24" cy="24" r="13" fill="#141821"/><circle cx="24" cy="24" r="7" fill="{cor}" opacity=".9"/>'
-        f'<circle cx="24" cy="24" r="13" fill="none" stroke="#000" stroke-width="1.5" opacity=".6"/>')
+        f'<circle cx="24" cy="24" r="13" fill="none" stroke="#000" stroke-width="1.5" opacity=".6"/>', render=(64, 64))
 
 
 # ---------------------------------------------------------------- armas (96x96, traço dourado)
