@@ -12,11 +12,11 @@ Jogos de mistério acabam quando o caso é resolvido, e as escolas têm poucas f
 
 ## Como se joga
 
-O jogador investiga uma mansão, coleta pistas e interroga suspeitos para descobrir **quem foi, com que arma e em que lugar**.
+De 1 a 3 jogadores, no mesmo computador, são detetives numa mansão. Revezando a vez, cada um joga o dado, anda pelo tabuleiro, coleta pistas e interroga suspeitos para descobrir **quem foi, com que arma e em que cômodo**.
 
-- **5 vidas:** cada palpite errado custa uma.
-- **Cartada Final:** acusar tudo de uma vez, a qualquer hora. Errou, está eliminado.
-- **Pontos:** 100 por caso, +20 por vida restante e +50 pela Cartada Final certa.
+- **Palpite:** só dentro de um cômodo e sobre esse cômodo. Errado custa 1 das 5 vidas, e o jogo mostra um item errado.
+- **Cartada Final:** acusar tudo de uma vez, na sua vez. Errou, está eliminado.
+- **Pontos:** quem vence ganha 100, +20 por vida restante e +50 pela Cartada Final certa.
 
 ## Arquitetura
 
@@ -27,7 +27,7 @@ O jogador investiga uma mansão, coleta pistas e interroga suspeitos para descob
 | Fluxo no n8n | Gatilho diário → preparar → IA → validar → registrar | n8n self-hosted (Docker) |
 | RAG | Busca trechos das 24 fichas para dar contexto ao caso | MiniLM multilíngue + ChromaDB |
 | LLM | Escreve enredo, pistas e depoimentos em JSON | Claude Haiku 5.5 |
-| Validador | Exige exatamente 1 solução entre as 125 combinações | python-constraint ou Z3 |
+| Validador | Exige exatamente 1 solução entre as 150 combinações | python-constraint ou Z3 |
 | Fine-tuning | Detecta depoimentos que contradizem pistas | BERTimbau no Google Colab |
 | Jogo | Interface offline, lê só casos aprovados | Pygame-CE + PyInstaller |
 
