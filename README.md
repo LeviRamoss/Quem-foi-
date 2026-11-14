@@ -47,15 +47,29 @@ A chave da API fica só na fábrica de casos (`.env` e credenciais do n8n). O jo
 
 Para conferir um caso: `python fabrica/validar.py dados/casos/caso_exemplo.json`
 
-## Como rodar (a partir da semana 1)
+## Como rodar
+
+**Jogo** (já jogável com o caso de exemplo):
+
+```bash
+pip install pygame-ce
+python jogo/main.py
+```
+
+**Testes das regras:** `python -m unittest discover testes` · **Roteiro dos QAs:** [docs/roteiro_testes.md](docs/roteiro_testes.md)
+
+**Fábrica de casos** (em construção):
 
 ```bash
 pip install -r requirements.txt
 cp .env.example .env              # coloque sua chave da API
 python fabrica/indexar.py         # cria o banco vetorial
 python fabrica/gerar_caso.py      # gera e valida um caso
-python jogo/main.py               # abre o jogo
 ```
+
+## Arte
+
+Toda a arte (tabuleiro, cômodos, suspeitos, detetives, armas, dado) foi criada pelo grupo em código, na paleta do jogo. Fica em `jogo/assets/`, e o gerador está em `jogo/arte_fonte/gerar_arte.py`. Não usa imagens de terceiros.
 
 ## Versão mínima em 3 semanas
 

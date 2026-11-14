@@ -36,7 +36,7 @@ O tabuleiro tem **11 × 9 casas**. Os 6 cômodos ocupam 3 × 3 casas cada, com u
 
 | Trajeto | Casas | Vezes de jogar, em média |
 | --- | --- | --- |
-| Saguão até o cômodo mais perto | 4 | 1,6 |
+| Saguão até qualquer cômodo (todos ficam à mesma distância) | 5 | 1,9 |
 | Cômodo vizinho em cima ou embaixo | 4 | 1,6 |
 | Cômodo vizinho ao lado | 6 | 2,2 |
 | Canto a canto (o mais longo) | 12 | 3,9 |
