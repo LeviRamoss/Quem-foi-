@@ -77,6 +77,6 @@ Toda a arte (tabuleiro, cômodos, suspeitos, detetives, armas, dado) foi criada 
 
 1. **Gerar:** base no ChromaDB, gerador e solver por linha de comando.
 2. **Automatizar:** fluxo no n8n com registro na planilha e 30 casos aprovados.
-3. **Jogar:** tabuleiro de 11 × 9 casas, dado, até 3 jogadores, palpites, Cartada Final, vidas, pontos e `.exe`.
+3. **Jogar:** tabuleiro de 21 × 17 casas, dado, até 3 jogadores, palpites, Cartada Final, vidas, pontos e `.exe`.
 
 Todos os dados do projeto são fictícios e foram criados pelo grupo.

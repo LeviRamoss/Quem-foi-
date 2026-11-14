@@ -23,8 +23,9 @@ import gerador_local  # noqa: E402  (casos novos sem internet)
 
 LARGURA, ALTURA = 1600, 900   # a janela se ajusta ao monitor (F11 = tela cheia)
 FPS = 60
-CASA = 88                     # tamanho de cada casa do tabuleiro
-TAB_L, TAB_A = 11 * CASA, 9 * CASA
+TAB = carregar_json(DADOS / "tabuleiro.json")
+CASA = TAB["tamanho_casa_px"]          # tamanho de cada casa do tabuleiro (46px)
+TAB_L, TAB_A = TAB["largura"] * CASA, TAB["altura"] * CASA   # 21 x 17 casas
 BX, BY = 316, 70              # canto do tabuleiro na tela
 PX = BX + TAB_L + 16          # coluna da direita
 
@@ -221,12 +222,13 @@ class Jogo:
         return pygame.Rect(BX + a["col"] * CASA, BY + a["lin"] * CASA, a["largura"] * CASA, a["altura"] * CASA)
 
     def rect_saguao(self):
-        return pygame.Rect(BX + 4 * CASA, BY + 4 * CASA, 3 * CASA, CASA)
+        a = TAB["saguao"]["area"]
+        return pygame.Rect(BX + a["col"] * CASA, BY + a["lin"] * CASA, a["largura"] * CASA, a["altura"] * CASA)
 
     def centro_lugar(self, lugar, indice=0):
         if lugar == SAGUAO:
             r = self.rect_saguao()
-            return (r.left + CASA // 2 + indice * CASA, r.centery)
+            return (r.centerx + (indice - 1) * CASA, r.centery - CASA // 3)
         if lugar[0] == "comodo":
             return self.rect_comodo(lugar[1]).center
         return self.rect_casa(lugar[1], lugar[2]).center
@@ -497,10 +499,10 @@ class Jogo:
                 centro = self.centro_lugar(jog.posicao, no_saguao)
                 if jog.posicao == SAGUAO:
                     no_saguao += 1
-            peao = self.img.peoes[jog.peao]
+            peao = self.img.escala(self.img.peoes[jog.peao], (CASA - 4, CASA - 4))
             self.tela.blit(peao, peao.get_rect(center=centro))
             if jog is p.jogador:
-                pygame.draw.circle(self.tela, BRANCO_SUAVE, (int(centro[0]), int(centro[1])), 37, 3)
+                pygame.draw.circle(self.tela, BRANCO_SUAVE, (int(centro[0]), int(centro[1])), CASA // 2 + 3, 3)
 
     def desenhar_caderno(self, j):
         caso = self.partida.caso

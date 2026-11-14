@@ -20,28 +20,37 @@ De 1 a 3 jogadores, no mesmo computador, são detetives numa mansão. Vence quem
 
 ## Tabuleiro
 
-O tabuleiro tem **11 × 9 casas**. Os 6 cômodos ocupam 3 × 3 casas cada, com uma porta virada para o corredor do meio. Os detetives começam juntos no **Saguão**, no centro.
+O tabuleiro tem **21 × 17 casas**, com 154 casas de corredor. Os 6 cômodos ocupam de 5 × 5 a 6 × 5 casas, cada um com uma porta virada para a faixa do meio. Os detetives começam juntos no **Saguão**, no centro. A **Escadaria** e o **Relógio de pêndulo** são obstáculos: não dá para passar por eles.
 
 ```
- B B B · E E E · A A A      B = Biblioteca     E = Escritório
- B B B · E E E · A A A      A = Adega          C = Cozinha
- B B B · E E E · A A A      S = Sala de Estar  J = Jardim
- · ▲ · · · ▲ · · · ▲ ·      ▲ ▼ = porta do cômodo
- · · · ◆ SAGUÃO ◆ · · ·     · = casa de corredor
- · ▼ · · · ▼ · · · ▼ ·      ◆ = saídas do Saguão
- C C C · S S S · J J J
- C C C · S S S · J J J
- C C C · S S S · J J J
+ B B B B B B · · E E E E E · · A A A A A A     B = Biblioteca     E = Escritório
+ B B B B B B · · E E E E E · · A A A A A A     A = Adega          C = Cozinha
+ B B B B B B · · E E E E E · · A A A A A A     S = Sala de Estar  J = Jardim
+ B B B B B B · · E E E E E · · A A A A A A     # = Saguão (início)
+ B B B B B B · · E E E E E · · A A A A A A     X = Escadaria
+ · · · · ▲ · · · · · ▲ · · · · · ▲ · · · ·     Y = Relógio de pêndulo
+ · · · · · · · · · · · · · · · · · · · · ·     ▲ ▼ = porta do cômodo
+ · · X X X · · · # # # # # · · · Y Y Y · ·     ◆ = saídas do Saguão
+ · · X X X · · ◆ # # # # # ◆ · · Y Y Y · ·     · = casa de corredor
+ · · X X X · · · # # # # # · · · Y Y Y · ·
+ · · · · · · · · · · · · · · · · · · · · ·
+ · · · · ▼ · · · · · ▼ · · · · · ▼ · · · ·
+ C C C C C C · · S S S S S · · J J J J J J
+ C C C C C C · · S S S S S · · J J J J J J
+ C C C C C C · · S S S S S · · J J J J J J
+ C C C C C C · · S S S S S · · J J J J J J
+ C C C C C C · · S S S S S · · J J J J J J
 ```
 
 | Trajeto | Casas | Vezes de jogar, em média |
 | --- | --- | --- |
-| Saguão até qualquer cômodo (todos ficam à mesma distância) | 5 | 1,9 |
-| Cômodo vizinho em cima ou embaixo | 4 | 1,6 |
-| Cômodo vizinho ao lado | 6 | 2,2 |
-| Canto a canto (o mais longo) | 12 | 3,9 |
+| Saguão até qualquer cômodo (todos ficam à mesma distância) | 8 | 2,8 |
+| Cômodo vizinho ao lado (ex.: Biblioteca e Escritório) | 8 | 2,8 |
+| Cômodo vizinho em cima ou embaixo (ex.: Biblioteca e Cozinha) | 10 | 3,3 |
+| Cômodo do meio até um canto do outro lado | 14 | 4,5 |
+| Canto a canto (o mais longo) | 20 | 6,2 |
 
-Não há passagens secretas.
+Na primeira vez de jogar, ninguém alcança um cômodo: do Saguão são 8 passos. Não há passagens secretas.
 
 ## Dado e movimento
 

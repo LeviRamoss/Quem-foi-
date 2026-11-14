@@ -6,12 +6,12 @@
     "area": {
       "col": 0,
       "lin": 0,
-      "largura": 3,
-      "altura": 3
+      "largura": 6,
+      "altura": 5
     },
     "porta": {
-      "col": 1,
-      "lin": 3
+      "col": 4,
+      "lin": 5
     },
     "descricao": "Estantes do chão ao teto, poltrona de leitura, lareira e uma mesa com uma garrafa de licor.",
     "vestigios": "Livro fora do lugar, copo com resíduo, marca de perfume na poltrona."
@@ -21,14 +21,14 @@
     "nome": "Escritório",
     "sigla": "E",
     "area": {
-      "col": 4,
+      "col": 8,
       "lin": 0,
-      "largura": 3,
-      "altura": 3
+      "largura": 5,
+      "altura": 5
     },
     "porta": {
-      "col": 5,
-      "lin": 3
+      "col": 10,
+      "lin": 5
     },
     "descricao": "Mesa de Augusto, cofre na parede e arquivo com os contratos da construtora.",
     "vestigios": "Cofre aberto, gaveta forçada, papéis do testamento revirados."
@@ -38,14 +38,14 @@
     "nome": "Adega",
     "sigla": "A",
     "area": {
-      "col": 8,
+      "col": 15,
       "lin": 0,
-      "largura": 3,
-      "altura": 3
+      "largura": 6,
+      "altura": 5
     },
     "porta": {
-      "col": 9,
-      "lin": 3
+      "col": 16,
+      "lin": 5
     },
     "descricao": "Porão frio com prateleiras de vinho e uma escada estreita de pedra.",
     "vestigios": "Garrafa quebrada, pó nas mãos, porta trancada por fora."
@@ -56,13 +56,13 @@
     "sigla": "C",
     "area": {
       "col": 0,
-      "lin": 6,
-      "largura": 3,
-      "altura": 3
+      "lin": 12,
+      "largura": 6,
+      "altura": 5
     },
     "porta": {
-      "col": 1,
-      "lin": 5
+      "col": 4,
+      "lin": 11
     },
     "descricao": "Bancada de mármore, cepo de facas, despensa e porta dos fundos.",
     "vestigios": "Faca fora do cepo, louça lavada fora de hora, pegadas no piso molhado."
@@ -72,14 +72,14 @@
     "nome": "Sala de Estar",
     "sigla": "S",
     "area": {
-      "col": 4,
-      "lin": 6,
-      "largura": 3,
-      "altura": 3
+      "col": 8,
+      "lin": 12,
+      "largura": 5,
+      "altura": 5
     },
     "porta": {
-      "col": 5,
-      "lin": 5
+      "col": 10,
+      "lin": 11
     },
     "descricao": "Sofás, piano, castiçais de prata no aparador e a porta de vidro para o jardim.",
     "vestigios": "Castiçal fora do lugar, almofada amassada, vidro embaçado."
@@ -89,14 +89,14 @@
     "nome": "Jardim",
     "sigla": "J",
     "area": {
-      "col": 8,
-      "lin": 6,
-      "largura": 3,
-      "altura": 3
+      "col": 15,
+      "lin": 12,
+      "largura": 6,
+      "altura": 5
     },
     "porta": {
-      "col": 9,
-      "lin": 5
+      "col": 16,
+      "lin": 11
     },
     "descricao": "Canteiros, estufa, galpão de ferramentas e um caminho de pedras.",
     "vestigios": "Pegadas de lama, cinza de charuto, ferramenta faltando no galpão."

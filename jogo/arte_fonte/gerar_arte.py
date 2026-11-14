@@ -3,6 +3,7 @@
 Uso: python arte.py <pasta_saida>
 """
 import os, sys, json
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 OUT = sys.argv[1]
@@ -112,35 +113,61 @@ for cid, (piso, moveis) in MOVEIS.items():
     add(f"comodos/{cid}.png", 192, 192, comodo(piso, moveis), PADROES, render=(384, 384))
 
 
-# ---------------------------------------------------------------- tabuleiro completo 704x576 (11x9 casas de 64px)
-mapa = ["BBB.EEE.AAA", "BBB.EEE.AAA", "BBB.EEE.AAA", "...........", "....###....",
-        "...........", "CCC.SSS.JJJ", "CCC.SSS.JJJ", "CCC.SSS.JJJ"]
-pos = {"l01": (0, 0), "l05": (4, 0), "l06": (8, 0), "l02": (0, 6), "l04": (4, 6), "l03": (8, 6)}
-portas = {"l01": (1, 3), "l05": (5, 3), "l06": (9, 3), "l02": (1, 5), "l04": (5, 5), "l03": (9, 5)}
-C = 64
-corpo = f'<rect width="704" height="576" fill="url(#corredor)"/>'
-for lin, row in enumerate(mapa):
+# ---------------------------------------------------------------- tabuleiro completo, lido de dados/tabuleiro.json
+DADOS = Path(__file__).resolve().parent.parent.parent / "dados"
+TAB = json.loads((DADOS / "tabuleiro.json").read_text(encoding="utf-8"))
+COMS = json.loads((DADOS / "comodos.json").read_text(encoding="utf-8"))
+C = TAB["tamanho_casa_px"]
+W, H = TAB["largura"] * C, TAB["altura"] * C
+corpo = f'<rect width="{W}" height="{H}" fill="url(#corredor)"/>'
+for lin, row in enumerate(TAB["mapa"]):
     for col, ch in enumerate(row):
         if ch == ".":
-            corpo += f'<rect x="{col*C+1}" y="{lin*C+1}" width="{C-2}" height="{C-2}" fill="none" stroke="#2C251C" stroke-width="1.5"/>'
-# saguão
-corpo += f'<rect x="{4*C}" y="{4*C}" width="{3*C}" height="{C}" fill="url(#marmore)"/><rect x="{4*C+2}" y="{4*C+2}" width="{3*C-4}" height="{C-4}" fill="none" stroke="{OURO}" stroke-width="2"/>'
-corpo += f'<rect x="{5*C+6}" y="{4*C+16}" width="{C-12}" height="32" rx="3" fill="#2B1F14" stroke="{OURO}" stroke-width="1.5"/><rect x="{5*C+16}" y="{4*C+22}" width="22" height="18" fill="#D9D0BC" opacity=".6" transform="rotate(-8 {5*C+27} {4*C+31})"/>'
-# cômodos (embutidos como <g> com as mesmas peças)
-for cid, (col, lin) in pos.items():
-    piso, moveis = MOVEIS[cid]
-    corpo += f'<g transform="translate({col*C} {lin*C})">{comodo(piso, moveis)}</g>'
-# portas
-for cid, (col, lin) in portas.items():
-    x = col * C; cima = lin == 3
-    y = lin * C if cima else lin * C + C - 8
-    corpo += f'<rect x="{x+14}" y="{y}" width="{C-28}" height="8" fill="{OURO}"/>'
-    # seta discreta na casa da porta
-    cx, cy = x + C / 2, lin * C + C / 2
-    d = f"M{cx-8} {cy+3}L{cx} {cy-6}L{cx+8} {cy+3}" if cima else f"M{cx-8} {cy-3}L{cx} {cy+6}L{cx+8} {cy-3}"
-    corpo += f'<path d="{d}" fill="none" stroke="{OURO}" stroke-width="2.5" opacity=".7"/>'
-corpo += f'<rect x="1" y="1" width="702" height="574" fill="none" stroke="#6A6658" stroke-width="2"/>'
-add("tabuleiro.png", 704, 576, corpo, PADROES, render=(968, 792))  # casas de 88px
+            corpo += f'<rect x="{col*C+1}" y="{lin*C+1}" width="{C-2}" height="{C-2}" fill="none" stroke="#2C251C" stroke-width="1.2"/>'
+
+
+def area_px(a):
+    return a["col"] * C, a["lin"] * C, a["largura"] * C, a["altura"] * C
+
+
+# saguão: mármore com a mesa do caso no meio
+x, y, w, h = area_px(TAB["saguao"]["area"])
+corpo += (f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="url(#marmore)"/>'
+          f'<rect x="{x+3}" y="{y+3}" width="{w-6}" height="{h-6}" fill="none" stroke="{OURO}" stroke-width="2"/>'
+          f'<rect x="{x+w/2-50}" y="{y+h/2-24}" width="100" height="48" rx="4" fill="#2B1F14" stroke="{OURO}" stroke-width="1.5"/>'
+          f'<rect x="{x+w/2-26}" y="{y+h/2-15}" width="40" height="30" fill="#D9D0BC" opacity=".6" transform="rotate(-8 {x+w/2-6} {y+h/2})"/>'
+          f'<text x="{x+w/2}" y="{y+h-10}" text-anchor="middle" font-family="Caladea, Georgia, serif" font-size="15" fill="{OURO2}" letter-spacing="3">SAGUÃO</text>')
+# obstáculos: escadaria e relógio de pêndulo
+for ob in TAB.get("obstaculos", []):
+    x, y, w, h = area_px(ob["area"])
+    corpo += f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="url(#marmore)"/><rect x="{x+2}" y="{y+2}" width="{w-4}" height="{h-4}" fill="none" stroke="#6A6658" stroke-width="2"/>'
+    if ob["sigla"] == "X":   # degraus
+        for k in range(7):
+            corpo += f'<rect x="{x+12}" y="{y+12+k*15}" width="{w-24}" height="12" fill="#3A3D45" stroke="#1B1D22" stroke-width="1.5"/>'
+    else:                   # relógio visto de cima
+        cx, cy = x + w / 2, y + h / 2 - 6
+        corpo += (f'<rect x="{cx-30}" y="{cy-40}" width="60" height="80" rx="6" fill="#2B1F14" stroke="#5A4630" stroke-width="2"/>'
+                  f'<circle cx="{cx}" cy="{cy-8}" r="22" fill="#E8E2D2" opacity=".85"/><path d="M{cx} {cy-8}V{cy-24}M{cx} {cy-8}L{cx+12} {cy-2}" stroke="#14110C" stroke-width="3"/>')
+    corpo += f'<text x="{x+w/2}" y="{y+h-8}" text-anchor="middle" font-family="Carlito, Arial, sans-serif" font-size="13" fill="{SUAVE}">{ob["nome"]}</text>'
+# cômodos: a mesma arte de 192x192, recortada para o tamanho do cômodo
+for cm in COMS:
+    piso, moveis = MOVEIS[cm["id"]]
+    x, y, w, h = area_px(cm["area"])
+    corpo += (f'<svg x="{x}" y="{y}" width="{w}" height="{h}" viewBox="0 0 192 192" preserveAspectRatio="xMidYMid slice">'
+              f'{comodo(piso, moveis)}</svg>'
+              f'<rect x="{x+2}" y="{y+2}" width="{w-4}" height="{h-4}" fill="none" stroke="#6A6658" stroke-width="4"/>')
+# portas: barra dourada na parede + seta na casa da porta
+for cm in COMS:
+    a, pt = cm["area"], cm["porta"]
+    px, py = pt["col"] * C, pt["lin"] * C
+    acima = pt["lin"] >= a["lin"] + a["altura"]   # porta embaixo do cômodo: seta para cima
+    by = py - 6 if acima else py + C - 2
+    corpo += f'<rect x="{px+8}" y="{by}" width="{C-16}" height="8" fill="{OURO}"/>'
+    cx, cy = px + C / 2, py + C / 2
+    d = f"M{cx-7} {cy+3}L{cx} {cy-5}L{cx+7} {cy+3}" if acima else f"M{cx-7} {cy-3}L{cx} {cy+5}L{cx+7} {cy-3}"
+    corpo += f'<path d="{d}" fill="none" stroke="{OURO}" stroke-width="2.5" opacity=".75"/>'
+corpo += f'<rect x="1" y="1" width="{W-2}" height="{H-2}" fill="none" stroke="#6A6658" stroke-width="2"/>'
+add("tabuleiro.png", W, H, corpo, PADROES)  # 1 pixel por pixel: casas de 46px
 
 
 # ---------------------------------------------------------------- retratos (160x160): silhueta noir + detalhe de cada um
@@ -241,7 +268,7 @@ with sync_playwright() as p:
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         pg.set_viewport_size({"width": w, "height": h})
         pg.set_content(f'<html><body style="margin:0;background:transparent">{svg}</body></html>')
-        pg.locator("svg").screenshot(path=dest, omit_background=True)
+        pg.locator("body > svg").screenshot(path=dest, omit_background=True)
         with open(dest.replace(".png", ".svg"), "w", encoding="utf-8") as f:
             f.write(svg)
     b.close()

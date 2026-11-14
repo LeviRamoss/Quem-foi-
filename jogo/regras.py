@@ -63,6 +63,9 @@ class Tabuleiro:
             self.vizinhos[porta].append(comodo(cid))
         saidas = [casa(s["col"], s["lin"]) for s in dados_tabuleiro["saguao"]["saidas"]]
         self.vizinhos[SAGUAO] = saidas
+        self.saguao_area = dados_tabuleiro["saguao"]["area"]
+        self.saidas_saguao = saidas
+        self.obstaculos = dados_tabuleiro.get("obstaculos", [])
 
     @classmethod
     def padrao(cls):

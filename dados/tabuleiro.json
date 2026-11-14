@@ -1,23 +1,23 @@
 {
-  "largura": 11,
-  "altura": 9,
-  "tamanho_casa_px": 64,
+  "largura": 21,
+  "altura": 17,
+  "tamanho_casa_px": 46,
   "legenda": "Coordenadas (col, lin) começando em 0 no canto de cima à esquerda. A porta é a casa de corredor colada ao cômodo.",
   "saguao": {
     "area": {
-      "col": 4,
-      "lin": 4,
-      "largura": 3,
-      "altura": 1
+      "col": 8,
+      "lin": 7,
+      "largura": 5,
+      "altura": 3
     },
     "saidas": [
       {
-        "col": 3,
-        "lin": 4
+        "col": 7,
+        "lin": 8
       },
       {
-        "col": 7,
-        "lin": 4
+        "col": 13,
+        "lin": 8
       }
     ],
     "regra": "Os 3 detetives começam aqui. É o único lugar onde mais de um peão pode ficar."
@@ -31,19 +31,29 @@
     "l03"
   ],
   "mapa": [
-    "BBB.EEE.AAA",
-    "BBB.EEE.AAA",
-    "BBB.EEE.AAA",
-    "...........",
-    "....###....",
-    "...........",
-    "CCC.SSS.JJJ",
-    "CCC.SSS.JJJ",
-    "CCC.SSS.JJJ"
+    "BBBBBB..EEEEE..AAAAAA",
+    "BBBBBB..EEEEE..AAAAAA",
+    "BBBBBB..EEEEE..AAAAAA",
+    "BBBBBB..EEEEE..AAAAAA",
+    "BBBBBB..EEEEE..AAAAAA",
+    ".....................",
+    ".....................",
+    "..XXX...#####...YYY..",
+    "..XXX...#####...YYY..",
+    "..XXX...#####...YYY..",
+    ".....................",
+    ".....................",
+    "CCCCCC..SSSSS..JJJJJJ",
+    "CCCCCC..SSSSS..JJJJJJ",
+    "CCCCCC..SSSSS..JJJJJJ",
+    "CCCCCC..SSSSS..JJJJJJ",
+    "CCCCCC..SSSSS..JJJJJJ"
   ],
   "legenda_mapa": {
     ".": "corredor",
     "#": "saguão",
+    "X": "escadaria (não dá para passar)",
+    "Y": "relógio de pêndulo (não dá para passar)",
     "B": "l01",
     "E": "l05",
     "A": "l06",
@@ -54,5 +64,27 @@
   "dado": {
     "faces": 6,
     "regra": "Anda até o número que saiu, sem diagonal e sem passar por casa ocupada."
-  }
+  },
+  "obstaculos": [
+    {
+      "nome": "Escadaria",
+      "sigla": "X",
+      "area": {
+        "col": 2,
+        "lin": 7,
+        "largura": 3,
+        "altura": 3
+      }
+    },
+    {
+      "nome": "Relógio de pêndulo",
+      "sigla": "Y",
+      "area": {
+        "col": 16,
+        "lin": 7,
+        "largura": 3,
+        "altura": 3
+      }
+    }
+  ]
 }
