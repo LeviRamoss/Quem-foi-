@@ -57,7 +57,7 @@ def ler_env() -> dict:
     env = {}
     arq = RAIZ / ".env"
     if arq.exists():
-        for linha in arq.read_text(encoding="utf-8").splitlines():
+        for linha in arq.read_text(encoding="utf-8-sig").splitlines():
             if "=" in linha and not linha.strip().startswith("#"):
                 k, _, v = linha.partition("=")
                 env[k.strip()] = v.strip().strip('"').strip("'")
