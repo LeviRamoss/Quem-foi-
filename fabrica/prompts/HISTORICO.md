@@ -23,6 +23,13 @@ Mudanças em relação à v1:
 
 Arquivo: [`v2.md`](v2.md).
 
-## Resultados
+## Resultados (17/11/2026, 5 casos por versão, Gemini nível gratuito)
 
-Os números de cada versão (aprovação, tokens, tempo) ficam em `fabrica/registro.csv`, gerado por `python fabrica/pipeline.py`.
+| Prompt | Aprovados | Aprovados na 1ª tentativa | Erros na 1ª tentativa (média) | Tentativas por caso (média) | Tokens de entrada por caso (média) |
+| --- | --- | --- | --- | --- | --- |
+| v1 | 3/5 | 1/5 | 1,4 | 2,2 | 12.515 |
+| v2 | 5/5 | 5/5 | 0 | 1,0 | 6.366 |
+
+Todos os erros da v1 foram do mesmo tipo: a resposta de um inocente não citava o cômodo do álibi (ex.: "resposta p07/q06 não cita Sala"). A v2 diz o que cada texto deve citar, e isso zerou esses erros. Como a v1 precisou de mais tentativas, gastou quase o dobro de tokens de entrada.
+
+Dados brutos: `fabrica/registro.csv`.

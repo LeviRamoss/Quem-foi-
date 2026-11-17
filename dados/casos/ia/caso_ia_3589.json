@@ -1,0 +1,518 @@
+{
+  "formato": 2,
+  "id": "caso_ia_3589",
+  "titulo": "O Relógio Parado na Mansão Valverde",
+  "vitima": {
+    "nome": "Augusto Valverde",
+    "descricao": "Dono da mansão e da construtora Valverde & Teles, 60 anos."
+  },
+  "horario_do_crime": "entre 21h30 e 22h",
+  "enredo": "O soturno jantar de aniversário de Augusto Valverde encerrou-se sob uma pesada atmosfera de tensão. Às 21h30, o patriarca despediu-se dos convidados e recolheu-se, sem que ninguém mais o visse com vida. Exatamente às 22h, a governanta deu o alarme. Com a tempestade alagando a única estrada de acesso e as portas da mansão trancadas por dentro, o ar condensa o mistério: a sombra do culpado ainda ronda os corredores da Mansão Valverde.",
+  "solucao": {
+    "culpado": "p05",
+    "arma": "a06",
+    "comodo": "l01"
+  },
+  "suspeitos": [
+    "p03",
+    "p02",
+    "p05",
+    "p07",
+    "p08"
+  ],
+  "armas": [
+    "a03",
+    "a05",
+    "a02",
+    "a06",
+    "a04"
+  ],
+  "comodos": [
+    "l01",
+    "l05",
+    "l06",
+    "l02",
+    "l04",
+    "l03"
+  ],
+  "pistas": [
+    {
+      "id": "pi01",
+      "comodo": "l01",
+      "texto": "Marcas nítidas de dedos sujos de poeira de garrafas velhas — idênticas às impressões de Bruno — foram encontradas perto da moldura da porta.",
+      "fatos": [
+        {
+          "tipo": "estava_em",
+          "suspeito": "p05",
+          "comodo": "l01"
+        }
+      ]
+    },
+    {
+      "id": "pi02",
+      "comodo": "l01",
+      "texto": "Ramos e folhas recém-cortados jazem sobre o chão, ostentando um corte limpo e preciso.",
+      "fatos": []
+    },
+    {
+      "id": "pi03",
+      "comodo": "l05",
+      "texto": "A pesada porta de carvalho permaneceu trancada a noite inteira; a única chave continuava presa ao molho da governanta.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "comodo",
+          "item": "l05"
+        }
+      ]
+    },
+    {
+      "id": "pi04",
+      "comodo": "l05",
+      "texto": "O revólver de coleção repousa no interior do cofre trancado, com o tambor descarregado e sem vestígios de uso.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "arma",
+          "item": "a04"
+        }
+      ]
+    },
+    {
+      "id": "pi05",
+      "comodo": "l06",
+      "texto": "Rita esteve na adega selecionando os vinhos do brinde das 21h às 22h15: as garrafas alinhadas trazem suas impressões digitais e nenhum item foi movido.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "comodo",
+          "item": "l06"
+        },
+        {
+          "tipo": "estava_em",
+          "suspeito": "p03",
+          "comodo": "l06"
+        }
+      ]
+    },
+    {
+      "id": "pi06",
+      "comodo": "l06",
+      "texto": "O antigo relógio de parede de carvalho parou misteriosamente às 21h47.",
+      "fatos": []
+    },
+    {
+      "id": "pi07",
+      "comodo": "l02",
+      "texto": "Jonas permaneceu na cozinha auxiliando na sobremesa das 21h às 22h15: as louças utilizadas continuam organizadas na pia e a ordem do cômodo está intacta.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "comodo",
+          "item": "l02"
+        },
+        {
+          "tipo": "estava_em",
+          "suspeito": "p07",
+          "comodo": "l02"
+        }
+      ]
+    },
+    {
+      "id": "pi08",
+      "comodo": "l02",
+      "texto": "A faca de cozinha repousa limpa e reluzente em seu suporte de madeira.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "arma",
+          "item": "a02"
+        }
+      ]
+    },
+    {
+      "id": "pi09",
+      "comodo": "l04",
+      "texto": "Marcos permaneceu na sala de estar conversando ao lado do piano das 21h às 22h15: os testemunhos das testemunhas confirmam sua presença e o ambiente não sofreu alterações.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "comodo",
+          "item": "l04"
+        },
+        {
+          "tipo": "estava_em",
+          "suspeito": "p02",
+          "comodo": "l04"
+        }
+      ]
+    },
+    {
+      "id": "pi10",
+      "comodo": "l04",
+      "texto": "O par de castiçais pesados permanece sobre o aparador, coberto por uma camada intocada de poeira.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "arma",
+          "item": "a05"
+        }
+      ]
+    },
+    {
+      "id": "pi11",
+      "comodo": "l03",
+      "texto": "Lívia esteve no banco do jardim junto à estufa das 21h às 22h15: as marcas de barro no caminho de pedras registram apenas o trajeto de ida e volta, sem distúrbios no local.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "comodo",
+          "item": "l03"
+        },
+        {
+          "tipo": "estava_em",
+          "suspeito": "p08",
+          "comodo": "l03"
+        }
+      ]
+    },
+    {
+      "id": "pi12",
+      "comodo": "l03",
+      "texto": "A grossa corda de sisal encontra-se perfeitamente enrolada em seu gancho no galpão.",
+      "fatos": [
+        {
+          "tipo": "nao_e",
+          "categoria": "arma",
+          "item": "a03"
+        }
+      ]
+    }
+  ],
+  "respostas": {
+    "p03": {
+      "q01": {
+        "texto": "Eu estava na adega, exatamente entre 21h e 22h15, selecionando os rótulos para o brinde.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p03",
+          "comodo": "l06"
+        }
+      },
+      "q02": {
+        "texto": "Não vi viva alma circular. Fiquei concentrada na organização das garrafas o tempo todo.",
+        "verdade": true,
+        "fato": null
+      },
+      "q03": {
+        "texto": "Sirvo a esta mansão há exatos vinte anos. Augusto me fez promessas formais que não foram cumpridas.",
+        "verdade": true,
+        "fato": null
+      },
+      "q04": {
+        "texto": "Se busca motivação, olhe para o jovem Bruno. Ele precisa desesperadamente da herança para liquidar suas dívidas.",
+        "verdade": true,
+        "fato": null
+      },
+      "q05": {
+        "texto": "Nenhum barulho anormal. Apenas o som constante do vento uivando contra as vidraças.",
+        "verdade": true,
+        "fato": null
+      },
+      "q06": {
+        "texto": "Basta examinar a adega: as garrafas que separei trazem minhas digitais bem marcadas.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p03",
+          "comodo": "l06"
+        }
+      },
+      "q07": {
+        "texto": "Assim que o jantar terminou, desci à adega e lá permaneci até as 22h15 em ponto.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p03",
+          "comodo": "l06"
+        }
+      },
+      "q08": {
+        "texto": "Sou extremamente detalhista e garanto que nada fugiu da sua posição habitual.",
+        "verdade": true,
+        "fato": null
+      },
+      "q09": {
+        "texto": "Tenho minhas desconfianças sobre a Dra. Lívia. Há algo excessivamente frio em suas posturas.",
+        "verdade": true,
+        "fato": null
+      },
+      "q10": {
+        "texto": "Porque carrego o molho com as chaves da casa. Porém, ter acesso significa zelar pelo lar, não destruí-lo.",
+        "verdade": true,
+        "fato": null
+      }
+    },
+    "p02": {
+      "q01": {
+        "texto": "Eu estava na sala de estar, ora essa! Debatendo negócios perto do piano com os presentes.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p02",
+          "comodo": "l04"
+        }
+      },
+      "q02": {
+        "texto": "Não vi ninguém transitando pelos corredores. Minha atenção esteve toda na conversa.",
+        "verdade": true,
+        "fato": null
+      },
+      "q03": {
+        "texto": "Trinta anos de sociedade na Valverde & Teles. E o Augusto queria me dar um golpe, rompendo a empresa!",
+        "verdade": true,
+        "fato": null
+      },
+      "q04": {
+        "texto": "Deseja um motivo real? Olhe para a governanta. Rita descobriu que ficou fora do testamento.",
+        "verdade": true,
+        "fato": null
+      },
+      "q05": {
+        "texto": "Escutei as batidas do relógio e, logo em seguida, um silêncio incômodo tomou a casa.",
+        "verdade": true,
+        "fato": null
+      },
+      "q06": {
+        "texto": "Interrogue os convidados junto ao piano! Todos confirmam que não me afastei da sala de estar.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p02",
+          "comodo": "l04"
+        }
+      },
+      "q07": {
+        "texto": "Levantei da mesa e fui direto para a sala de estar, permanecendo lá até as 22h15.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p02",
+          "comodo": "l04"
+        }
+      },
+      "q08": {
+        "texto": "Tempo é dinheiro, detetive! Não fico gastando meu tempo reparando em quinquilharia fora do lugar.",
+        "verdade": true,
+        "fato": null
+      },
+      "q09": {
+        "texto": "Desconfio da Rita Moura. Ela conhece os cantos e atalhos desta propriedade como ninguém.",
+        "verdade": true,
+        "fato": null
+      },
+      "q10": {
+        "texto": "Por conta da nossa altercação comercial ontem. Mas discutir negócios não transforma ninguém em homicida!",
+        "verdade": true,
+        "fato": null
+      }
+    },
+    "p05": {
+      "q01": {
+        "texto": "Eu? Tava lá fora no jardim, cara! Tomando um ar fresco naquele banco perto da estufa... passei um tempão lá!",
+        "verdade": false,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p05",
+          "comodo": "l03"
+        }
+      },
+      "q02": {
+        "texto": "Olha, não vi vulto nenhum! Para mim a casa parecia um deserto.",
+        "verdade": true,
+        "fato": null
+      },
+      "q03": {
+        "texto": "Augusto era meu tio. E, bem, eu sou o herdeiro principal, né? Não nego o óbvio.",
+        "verdade": true,
+        "fato": null
+      },
+      "q04": {
+        "texto": "Aposto na Dra. Lívia! Ela vive metendo o nariz em finanças que não pertencem a ela.",
+        "verdade": true,
+        "fato": null
+      },
+      "q05": {
+        "texto": "Acho que escutei um ruído abafado... mas podia ser só a ventania batendo nas árvores.",
+        "verdade": true,
+        "fato": null
+      },
+      "q06": {
+        "texto": "A Lívia me viu no jardim! Pode perguntar para ela, tenho certeza que ela confirma!",
+        "verdade": false,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p05",
+          "comodo": "l03"
+        }
+      },
+      "q07": {
+        "texto": "Terminei de comer e fui voando pro jardim. Precisava respirar um pouco, a pressão tava insuportável.",
+        "verdade": false,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p05",
+          "comodo": "l03"
+        }
+      },
+      "q08": {
+        "texto": "Reparei em nada, não! Tava ocupado demais resolvendo meus próprios pensamentos.",
+        "verdade": true,
+        "fato": null
+      },
+      "q09": {
+        "texto": "O Jonas! Aquele jardineiro é calado demais... certeza que esconde algo grave.",
+        "verdade": true,
+        "fato": null
+      },
+      "q10": {
+        "texto": "É claro que vão me acusar por causa dos meus credores... todo mundo sabe que estou enforcado em dívidas!",
+        "verdade": true,
+        "fato": null
+      }
+    },
+    "p07": {
+      "q01": {
+        "texto": "Na cozinha. Ajudava com o serviço da sobremesa.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p07",
+          "comodo": "l02"
+        }
+      },
+      "q02": {
+        "texto": "Não vi ninguém passar. Fiquei no meu trabalho.",
+        "verdade": true,
+        "fato": null
+      },
+      "q03": {
+        "texto": "Trabalho no jardim há oito anos. Seu Augusto me demitiu sem motivo na semana passada.",
+        "verdade": true,
+        "fato": null
+      },
+      "q04": {
+        "texto": "Dona Rita ficou de fora da partilha dos bens. Ela esperava consideração.",
+        "verdade": true,
+        "fato": null
+      },
+      "q05": {
+        "texto": "Escutei passos apressados ecoando pelo corredor.",
+        "verdade": true,
+        "fato": null
+      },
+      "q06": {
+        "texto": "A louça que manuseei ainda está empilhada na pia da cozinha. Pode verificar.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p07",
+          "comodo": "l02"
+        }
+      },
+      "q07": {
+        "texto": "Fui para a cozinha logo após a refeição e de lá não saí até as 22h15.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p07",
+          "comodo": "l02"
+        }
+      },
+      "q08": {
+        "texto": "Apenas notei um quadro levemente torto na parede do corredor.",
+        "verdade": true,
+        "fato": null
+      },
+      "q09": {
+        "texto": "A Dra. Lívia. Ela tem um jeito estranho de observar as coisas.",
+        "verdade": true,
+        "fato": null
+      },
+      "q10": {
+        "texto": "Por ter sido demitido recentemente. Mas sou homem honrado, não tiro a vida de ninguém.",
+        "verdade": true,
+        "fato": null
+      }
+    },
+    "p08": {
+      "q01": {
+        "texto": "Eu me encontrava no jardim, buscando ar puro no banco situado próximo à estufa.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p08",
+          "comodo": "l03"
+        }
+      },
+      "q02": {
+        "texto": "Observei o jovem Bruno deslocando-se em direção à biblioteca por volta das 21h30.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p05",
+          "comodo": "l01"
+        }
+      },
+      "q03": {
+        "texto": "Exerço a função de advogada da família Valverde e encarregada da custódia do testamento.",
+        "verdade": true,
+        "fato": null
+      },
+      "q04": {
+        "texto": "O jardineiro Jonas foi dispensado de suas funções de maneira sumária e injustificada.",
+        "verdade": true,
+        "fato": null
+      },
+      "q05": {
+        "texto": "Notei o impacto seco de uma porta sendo fechada com força por volta das 21h40.",
+        "verdade": true,
+        "fato": null
+      },
+      "q06": {
+        "texto": "Examine a ruela do jardim: as marcas de barro no caminho de pedras demonstram que fiz apenas o trajeto de ida e volta.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p08",
+          "comodo": "l03"
+        }
+      },
+      "q07": {
+        "texto": "Retirei-me para o jardim logo após o término do jantar, ali permanecendo até as 22h15.",
+        "verdade": true,
+        "fato": {
+          "tipo": "estava_em",
+          "suspeito": "p08",
+          "comodo": "l03"
+        }
+      },
+      "q08": {
+        "texto": "Observei uma xícara de porcelana esquecida de forma inadequada sobre os degraus da escada.",
+        "verdade": true,
+        "fato": null
+      },
+      "q09": {
+        "texto": "Minha análise aponta para a Sra. Rita Moura. Há aspectos obscuros em sua conduta nesta noite.",
+        "verdade": true,
+        "fato": null
+      },
+      "q10": {
+        "texto": "Pelo fato de gerir a contabilidade do espólio. Contudo, zelo profissional jamais deve ser confundido com culpa.",
+        "verdade": true,
+        "fato": null
+      }
+    }
+  }
+}
