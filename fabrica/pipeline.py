@@ -22,6 +22,7 @@ import argparse
 import csv
 import json
 import random
+import socket
 import sys
 import time
 import unicodedata
@@ -166,6 +167,16 @@ class ErroIA(Exception):
     pass
 
 
+TEMPO_LIMITE_S = 180
+
+
+def _rebaixar(modelos: list[str], modelo: str) -> None:
+    """Modelo que falhou (cota, erro ou demora) vai para o fim da fila nas próximas chamadas."""
+    if modelo in modelos and len(modelos) > 1:
+        modelos.remove(modelo)
+        modelos.append(modelo)
+
+
 def chamar_gemini(sistema: str, prompt: str, chave: str, modelos: list[str]) -> dict:
     corpo = json.dumps({
         "systemInstruction": {"parts": [{"text": sistema}]},
@@ -173,21 +184,30 @@ def chamar_gemini(sistema: str, prompt: str, chave: str, modelos: list[str]) -> 
         "generationConfig": {"responseMimeType": "application/json", "temperature": 0.8},
     }).encode("utf-8")
     ultimo = None
-    for modelo in modelos:
+    for modelo in list(modelos):
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{modelo}:generateContent"
         req = urllib.request.Request(url, data=corpo, method="POST",
                                      headers={"Content-Type": "application/json", "x-goog-api-key": chave})
         t0 = time.perf_counter()
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
+            with urllib.request.urlopen(req, timeout=TEMPO_LIMITE_S) as resp:
                 dados = json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as e:
             msg = e.read().decode("utf-8", "replace")[:300]
             ultimo = f"{modelo}: HTTP {e.code} {msg}"
-            if e.code in (404, 429, 503):      # modelo indisponível ou cota: tenta o próximo
+            if e.code in (404, 429, 500, 503):  # modelo indisponível ou cota: tenta o próximo
+                _rebaixar(modelos, modelo)
                 continue
             raise ErroIA(ultimo)
+        except (TimeoutError, socket.timeout) as e:  # demorou demais: tenta o próximo
+            ultimo = f"{modelo}: sem resposta em {TEMPO_LIMITE_S}s ({e})"
+            _rebaixar(modelos, modelo)
+            continue
         except urllib.error.URLError as e:
+            if isinstance(e.reason, (TimeoutError, socket.timeout)):
+                ultimo = f"{modelo}: sem resposta em {TEMPO_LIMITE_S}s"
+                _rebaixar(modelos, modelo)
+                continue
             raise ErroIA(f"sem conexão com a API: {e}")
         ms = (time.perf_counter() - t0) * 1000
         uso = dados.get("usageMetadata", {})
