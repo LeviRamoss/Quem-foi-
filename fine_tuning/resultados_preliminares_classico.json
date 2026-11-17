@@ -1,0 +1,34 @@
+{
+ "f1_macro": {
+  "acaso (sem treino)": 0.337,
+  "classe mais comum": 0.167,
+  "TF-IDF + regressão logística (treinado)": 0.955
+ },
+ "treino_s": 0.23,
+ "n_treino": 2880,
+ "n_teste": 720,
+ "matriz_confusao": {
+  "ordem": [
+   "contradiz",
+   "confirma",
+   "neutro"
+  ],
+  "valores": [
+   [
+    240,
+    0,
+    0
+   ],
+   [
+    0,
+    240,
+    0
+   ],
+   [
+    5,
+    27,
+    208
+   ]
+  ]
+ }
+}

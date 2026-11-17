@@ -160,6 +160,7 @@ class Jogo:
         self.detetives = carregar_json(DADOS / "detetives.json")
         self.tabuleiro = Tabuleiro.padrao()
         self.ultima_solucao = None
+        self.casos_jogados = set()
         self.rng = random.Random()
 
         # tela de início
@@ -203,8 +204,8 @@ class Jogo:
         self.cena = "ordem"
 
     def novo_caso(self):
-        # caso novo a cada vez: outro culpado, outra arma e outro cômodo
-        caso = gerador_local.gerar_caso(self.rng, evitar=self.ultima_solucao)
+        # primeiro os casos escritos pela IA (dados/casos/ia); quando acabam, o gerador local
+        caso = self.proximo_caso_ia() or gerador_local.gerar_caso(self.rng, evitar=self.ultima_solucao)
         self.ultima_solucao = {**caso["solucao"], "titulo": caso["titulo"]}
         for j in self.jogadores:
             j.posicao, j.vidas, j.eliminado = SAGUAO, 5, False
@@ -212,6 +213,18 @@ class Jogo:
         self.partida = Partida(caso, self.jogadores, self.tabuleiro, rng=self.rng)
         self.modal = {"tipo": "abertura"}
         self.cena = "capa"
+
+    def proximo_caso_ia(self):
+        pasta = DADOS / "casos" / "ia"
+        for arq in sorted(pasta.glob("*.json")) if pasta.exists() else []:
+            if arq.stem in self.casos_jogados:
+                continue
+            self.casos_jogados.add(arq.stem)
+            try:
+                return carregar_json(arq)
+            except (OSError, ValueError):
+                continue
+        return None
 
     # ------------------------------------------------------------------ coordenadas
     def rect_casa(self, col, lin):
@@ -417,7 +430,8 @@ class Jogo:
         cx = LARGURA // 2
         if self.modal and self.modal.get("tipo") == "abertura":
             c = self.partida.caso
-            escrever(self.tela, "UM NOVO CASO", self.f_maq, PAL["dourado"], (cx, 170), centro=True)
+            origem = "UM NOVO CASO · ESCRITO PELA IA" if c["id"].startswith("caso_ia") else "UM NOVO CASO"
+            escrever(self.tela, origem, self.f_maq, PAL["dourado"], (cx, 170), centro=True)
             escrever(self.tela, c["titulo"], self.f_titulo, BRANCO_SUAVE, (cx, 205), centro=True)
             escrever(self.tela, c["enredo"], self.f_txt, CINZA, (cx - 420, 300), largura=840, entrelinha=8)
             escrever(self.tela, f"Vítima: {c['vitima']['nome']}  ·  Horário: {c['horario_do_crime']}",

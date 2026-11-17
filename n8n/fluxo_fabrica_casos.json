@@ -1,0 +1,257 @@
+{
+  "name": "Quem Foi? - Fábrica de casos",
+  "nodes": [
+    {
+      "id": "1df909ad-c5af-4975-8f2d-3148ae53bddd",
+      "name": "Gatilho manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "561dd760-3187-4494-80c5-2496359afd28",
+      "name": "Agenda diária (3h)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9602ba7c-9b87-4c3a-938b-eb7e6fb54fae",
+      "name": "1. Preparar (sorteio + RAG)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8765/preparar",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"versao\": \"v2\"}",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    },
+    {
+      "id": "bdb17d89-cf57-4aea-9774-a47907a3916a",
+      "name": "2. IA (Gemini)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8765/ia",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    },
+    {
+      "id": "a9cfc047-6aa6-4075-b9d7-a37d6ee11a42",
+      "name": "3. Validar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        780,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8765/validar",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    },
+    {
+      "id": "582a518f-ad4e-4322-bfbd-180b03abab13",
+      "name": "Aprovado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        100
+      ],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.aprovado }}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "7c91871c-92e2-4711-a3f3-535662df37cd",
+      "name": "Tentar de novo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        340
+      ],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.pode_tentar_de_novo }}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a19de232-d70e-49a1-9004-a9020bfce5e6",
+      "name": "4. Registrar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1300,
+        100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8765/registrar",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 240000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gatilho manual": {
+      "main": [
+        [
+          {
+            "node": "1. Preparar (sorteio + RAG)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agenda diária (3h)": {
+      "main": [
+        [
+          {
+            "node": "1. Preparar (sorteio + RAG)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Preparar (sorteio + RAG)": {
+      "main": [
+        [
+          {
+            "node": "2. IA (Gemini)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. IA (Gemini)": {
+      "main": [
+        [
+          {
+            "node": "3. Validar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Validar": {
+      "main": [
+        [
+          {
+            "node": "Aprovado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprovado?": {
+      "main": [
+        [
+          {
+            "node": "4. Registrar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tentar de novo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tentar de novo?": {
+      "main": [
+        [
+          {
+            "node": "2. IA (Gemini)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "4. Registrar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "quem-foi"
+  }
+}

@@ -251,7 +251,7 @@ def _montar(rng, evitar, n):
         else:
             c = onde[s]
             r["q01"] = {"texto": f"{_cap(no_na(c))}, {ATIVIDADE[c]}.", "verdade": True, "fato": em(s, c)}
-            r["q06"] = {"texto": f"Pode conferir: {PROVA[c]}.", "verdade": True, "fato": em(s, c)}
+            r["q06"] = {"texto": f"Pode conferir {no_na(c)}: {PROVA[c]}.", "verdade": True, "fato": em(s, c)}
             r["q07"] = {"texto": f"Fui {'para o' if c in ('l05', 'l03') else 'para a'} {COMODOS[c]['nome']} e fiquei lá até as 22h15.", "verdade": True, "fato": em(s, c)}
             if s == testemunha:
                 r["q02"] = {"texto": f"Vi {curto(culpado)} indo para os lados {do_da(local)}, lá pelas 21h30.", "verdade": True, "fato": em(culpado, local)}

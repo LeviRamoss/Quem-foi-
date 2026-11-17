@@ -7,3 +7,7 @@ build/
 dist/
 *.spec
 .venv/
+
+# os dados do fine-tuning entram no repositório (o Colab clona e lê)
+!fine_tuning/dados/treino.csv
+!fine_tuning/dados/teste.csv

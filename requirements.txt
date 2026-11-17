@@ -1,8 +1,6 @@
-anthropic
-chromadb
-sentence-transformers
-python-constraint
-z3-solver
+# Jogo
 pygame-ce
-pygame_gui
-pyinstaller
+# A fábrica de casos (RAG, pipeline, servidor do n8n) usa só a biblioteca padrão do Python.
+# Linha de base do fine-tuning (opcional)
+scikit-learn
+pandas
