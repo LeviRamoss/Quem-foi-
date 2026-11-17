@@ -1,0 +1,12 @@
+{
+ "modelo": "neuralmind/bert-base-portuguese-cased",
+ "pares_treino": 1200,
+ "pares_teste": 720,
+ "epocas": 1,
+ "f1_base_sem_treino": 0.185,
+ "f1_fine_tuning": 0.958,
+ "minutos_de_treino": 6.0,
+ "ms_por_par_base": 73.22,
+ "ms_por_par_fine_tuning": 68.02,
+ "dispositivo": "cpu"
+}

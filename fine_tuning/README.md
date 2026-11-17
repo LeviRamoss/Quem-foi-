@@ -13,7 +13,7 @@
 
 1. `python fine_tuning/preparar_dados.py` (já rodado; os CSVs estão no repositório).
 2. `python fine_tuning/baseline_classico.py` (linha de base clássica, precisa de `pip install scikit-learn pandas`).
-3. Abra `experimento_bertimbau.ipynb` no Google Colab, escolha GPU T4 e clique em *Executar tudo* (uns 5 minutos).
+3. BERTimbau no próprio PC: `py fine_tuning/treinar_bertimbau.py` (sem GPU usa o modo reduzido; instalação no começo do arquivo). Ou abra `experimento_bertimbau.ipynb` no Google Colab, escolha GPU T4 e clique em *Executar tudo* (uns 5 minutos).
 
 ## Resultados preliminares
 
@@ -24,9 +24,11 @@ Medidos com os mesmos dados de teste:
 | Acaso (sem treino) | 0,337 |
 | Sempre a classe mais comum | 0,167 |
 | TF-IDF + regressão logística, treinado (modelo clássico, não é fine-tuning) | 0,955 |
-| BERTimbau sem fine-tuning | rodar o caderno |
-| BERTimbau com fine-tuning | rodar o caderno |
+| BERTimbau base, sem fine-tuning | 0,185 |
+| BERTimbau com fine-tuning (1.200 pares, 1 época, 6 min em CPU) | 0,958 |
 
 O modelo clássico acerta todos os 240 `contradiz` e os 240 `confirma` e erra 32 dos 240 `neutro` (27 viram `confirma`, 5 viram `contradiz`), quase todos casos difíceis. Treino em 0,2 s. Arquivo: `resultados_preliminares_classico.json`.
 
 **Limitação:** os textos de treino vêm dos modelos de texto do gerador local, então são repetitivos e a tarefa fica mais fácil do que com textos escritos pela IA. O próximo passo é montar o teste com casos gerados pelo Gemini.
+
+**BERTimbau (17/11/2026, CPU, modo reduzido):** o fine-tuning levou o F1-macro de 0,185 para 0,958, igual à linha de base clássica. Acertou todos os 240 `contradiz` e 240 `confirma` e errou 30 dos 240 `neutro` (17 viraram `contradiz`, 13 `confirma`). Cerca de 70 ms por par em CPU. Arquivo: `resultados_bertimbau.json`.
