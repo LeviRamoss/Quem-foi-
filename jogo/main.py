@@ -556,7 +556,7 @@ class Jogo:
             pygame.draw.line(self.tela, PAL["vermelho"], (x + 4, y + 4), (x + tam - 4, y + tam - 4), 4)
             pygame.draw.line(self.tela, PAL["vermelho"], (x + tam - 4, y + 4), (x + 4, y + tam - 4), 4)
         elif estado == "certo":
-            pygame.draw.circle(self.tela, PAL["dourado_claro"], (pos[0] + tam // 2, pos[1] + tam // 2), tam // 2, 3)
+            pygame.draw.rect(self.tela, PAL["dourado_claro"], (pos[0] - 2, pos[1] - 2, tam + 4, tam + 4), 4, border_radius=max(6, tam // 10))
 
     def desenhar_acoes(self):
         """Botões empilhados no pé da coluna da direita."""

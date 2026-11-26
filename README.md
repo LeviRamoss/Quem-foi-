@@ -93,6 +93,4 @@ Cada caso gera uma linha em `fabrica/registro.csv` (prompt, tentativas, tokens, 
 
 ## Arte
 
-Toda a arte (tabuleiro, cômodos, suspeitos, detetives, armas, dado) foi criada pelo grupo em código, na paleta do jogo. Fica em `jogo/assets/`, e o gerador está em `jogo/arte_fonte/gerar_arte.py`. Não usa imagens de terceiros.
-
-Todos os dados do projeto são fictícios e foram criados pelo grupo.
+Os retratos, os cômodos, as armas e as peças do tabuleiro foram gerados pelo grupo com IA (Gemini), a partir de prompts escritos para o jogo, num estilo de pintura a óleo noir. Os originais ficam em `jogo/arte_fonte/ia/`, e `python jogo/arte_fonte/importar_artes.py` recorta, emoldura e monta o tabuleiro em `jogo/assets/`. Os peões e o dado continuam desenhados em código (`jogo/arte_fonte/gerar_arte.py`). Não usa imagens de terceiros.
