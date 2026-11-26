@@ -1,0 +1,107 @@
+{
+ "modelo": "neuralmind/bert-base-portuguese-cased",
+ "dispositivo": "cpu",
+ "pares_treino": 1200,
+ "epocas": 1,
+ "pares_teste": 720,
+ "ordem_matriz": [
+  "contradiz",
+  "confirma",
+  "neutro"
+ ],
+ "custo_api_usd": 0,
+ "base": {
+  "f1_macro_720": 0.185,
+  "f1_macro_120": 0.23,
+  "acerto_720": 0.339,
+  "ms_por_par": 73.8,
+  "matriz_720": [
+   [
+    1,
+    239,
+    0
+   ],
+   [
+    0,
+    240,
+    0
+   ],
+   [
+    37,
+    200,
+    3
+   ]
+  ]
+ },
+ "ajustado": {
+  "f1_macro_720": 0.958,
+  "f1_macro_120": 0.986,
+  "acerto_720": 0.958,
+  "ms_por_par": 81.3,
+  "matriz_720": [
+   [
+    240,
+    0,
+    0
+   ],
+   [
+    0,
+    240,
+    0
+   ],
+   [
+    17,
+    13,
+    210
+   ]
+  ],
+  "minutos_de_treino": 6.8
+ },
+ "base + RAG": {
+  "f1_macro_720": 0.167,
+  "f1_macro_120": 0.213,
+  "acerto_720": 0.333,
+  "ms_por_par": 161.3,
+  "matriz_720": [
+   [
+    0,
+    240,
+    0
+   ],
+   [
+    0,
+    240,
+    0
+   ],
+   [
+    1,
+    239,
+    0
+   ]
+  ]
+ },
+ "ajustado + RAG": {
+  "f1_macro_720": 0.92,
+  "f1_macro_120": 0.943,
+  "acerto_720": 0.919,
+  "ms_por_par": 164.0,
+  "matriz_720": [
+   [
+    240,
+    0,
+    0
+   ],
+   [
+    19,
+    221,
+    0
+   ],
+   [
+    29,
+    10,
+    201
+   ]
+  ],
+  "minutos_de_treino": 15.6
+ }
+}
