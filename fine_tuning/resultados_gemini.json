@@ -1,0 +1,102 @@
+{
+ "gemini_base": {
+  "modelo": "gemini-3.5-flash-lite",
+  "pares": 120,
+  "f1_macro": 0.676,
+  "acerto": 0.683,
+  "por_rotulo": {
+   "contradiz": {
+    "precisao": 0.704,
+    "revocacao": 0.475,
+    "f1": 0.567
+   },
+   "confirma": {
+    "precisao": 0.844,
+    "revocacao": 0.95,
+    "f1": 0.894
+   },
+   "neutro": {
+    "precisao": 0.521,
+    "revocacao": 0.625,
+    "f1": 0.568
+   }
+  },
+  "invalidos": 0,
+  "matriz": {
+   "contradiz": {
+    "contradiz": 19,
+    "confirma": 0,
+    "neutro": 21,
+    "invalido": 0
+   },
+   "confirma": {
+    "contradiz": 0,
+    "confirma": 38,
+    "neutro": 2,
+    "invalido": 0
+   },
+   "neutro": {
+    "contradiz": 8,
+    "confirma": 7,
+    "neutro": 25,
+    "invalido": 0
+   }
+  },
+  "tokens_entrada": 8914,
+  "tokens_saida": 1168,
+  "ms_por_chamada": 1178,
+  "ms_por_par": 58.9,
+  "custo_1000_pares_usd_pago": 0.0332,
+  "custo_real_usd": 0
+ },
+ "gemini_com_rag": {
+  "modelo": "gemini-3.1-flash-lite",
+  "pares": 120,
+  "f1_macro": 0.737,
+  "acerto": 0.742,
+  "por_rotulo": {
+   "contradiz": {
+    "precisao": 0.688,
+    "revocacao": 0.55,
+    "f1": 0.611
+   },
+   "confirma": {
+    "precisao": 0.905,
+    "revocacao": 0.95,
+    "f1": 0.927
+   },
+   "neutro": {
+    "precisao": 0.63,
+    "revocacao": 0.725,
+    "f1": 0.674
+   }
+  },
+  "invalidos": 0,
+  "matriz": {
+   "contradiz": {
+    "contradiz": 22,
+    "confirma": 2,
+    "neutro": 16,
+    "invalido": 0
+   },
+   "confirma": {
+    "contradiz": 1,
+    "confirma": 38,
+    "neutro": 1,
+    "invalido": 0
+   },
+   "neutro": {
+    "contradiz": 9,
+    "confirma": 2,
+    "neutro": 29,
+    "invalido": 0
+   }
+  },
+  "tokens_entrada": 20439,
+  "tokens_saida": 1168,
+  "ms_por_chamada": 4295,
+  "ms_por_par": 214.8,
+  "custo_1000_pares_usd_pago": 0.0572,
+  "custo_real_usd": 0
+ }
+}
