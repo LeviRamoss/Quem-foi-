@@ -175,6 +175,35 @@ class Jogo:
         self.anim = None             # animação em andamento
         self.aviso = ""
         self.botoes: list[Botao] = []
+        self.tem_musica = self.tocar_musica()
+        self.musica = self.tem_musica
+
+    # ------------------------------------------------------------------ música de fundo
+    def tocar_musica(self) -> bool:
+        """Toca em loop a primeira música de jogo/assets/audio/. Sem arquivo ou sem som, o jogo segue mudo."""
+        pasta = ASSETS / "audio"
+        arquivos = sorted(a for a in pasta.glob("*") if a.suffix.lower() in (".ogg", ".mp3", ".wav")) if pasta.exists() else []
+        if not arquivos:
+            return False
+        try:
+            if not pygame.mixer.get_init():
+                pygame.mixer.init()
+            pygame.mixer.music.load(str(arquivos[0]))
+            pygame.mixer.music.set_volume(0.35)
+            pygame.mixer.music.play(-1)          # -1 = repete para sempre
+            return True
+        except pygame.error as e:
+            print("Sem música:", e)
+            return False
+
+    def alternar_musica(self):
+        if not self.tem_musica:
+            return
+        if self.musica:
+            pygame.mixer.music.pause()
+        else:
+            pygame.mixer.music.unpause()
+        self.musica = not self.musica
 
     # ------------------------------------------------------------------ laço principal
     def rodar(self):
@@ -262,6 +291,9 @@ class Jogo:
     def evento(self, ev):
         if ev.type == pygame.KEYDOWN and ev.key == pygame.K_F11:
             pygame.display.toggle_fullscreen()
+            return
+        if ev.type == pygame.KEYDOWN and ev.key == pygame.K_m and self.campo_ativo is None:
+            self.alternar_musica()      # M liga e desliga a música (menos quando está digitando um nome)
             return
         if self.cena == "inicio":
             self.evento_inicio(ev)
@@ -477,6 +509,8 @@ class Jogo:
         for i in range(5):
             self.tela.blit(self.img.vida_cheia if i < j.vidas else self.img.vida_vazia, (PX + i * 32, 10))
         escrever(self.tela, f"{j.pontos} pontos", self.f_peq, PAL["dourado_claro"], (PX, 42))
+        if self.tem_musica:
+            escrever(self.tela, "Música: M", self.f_peq, PAL["dourado_claro"] if self.musica else CINZA, (LARGURA - 104, 14))
 
     def desenhar_tabuleiro(self):
         p = self.partida
