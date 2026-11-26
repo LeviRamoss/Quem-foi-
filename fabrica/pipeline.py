@@ -7,6 +7,7 @@ Etapas (as mesmas do fluxo do n8n):
   4. registrar  - salva o caso aprovado e uma linha em fabrica/registro.csv
 
 Uso (no terminal, dentro da pasta do projeto):
+    py fabrica/pipeline.py --casos 5 --prompt v3   (atual: v2 + defesas contra prompt injection)
     py fabrica/pipeline.py --casos 5 --prompt v2
     py fabrica/pipeline.py --casos 5 --prompt v1
     py fabrica/pipeline.py --simular          (sem chave: a "IA" devolve os textos-base)
@@ -36,6 +37,7 @@ RAIZ = AQUI.parent
 sys.path.insert(0, str(AQUI))
 import gerador_local  # noqa: E402
 import rag  # noqa: E402
+import seguranca  # noqa: E402
 import validar  # noqa: E402
 
 PROMPTS = AQUI / "prompts"
@@ -44,8 +46,10 @@ CASOS_IA = RAIZ / "dados" / "casos" / "ia"
 MAX_TENTATIVAS = 3
 MODELOS_PADRAO = ["gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.8-flash"]
 # Preço do plano pago (US$ por milhão de tokens: entrada, saída), só para comparar.
-# No plano gratuito o custo real é zero. Fonte: página de preços da Gemini API, consultada em 27/10/2026.
-PRECO_PAGO = {"gemini-3.1-flash-lite": (0.25, 1.50), "gemini-3.8-flash": (0.75, 3.75)}
+# No plano gratuito o custo real é zero. Fonte: ai.google.dev/pricing, consultada em 26/11/2026
+# (o 3.6-flash e o 3.8-flash sobem para 1,50 / 7,50 em 01/01/2027).
+PRECO_PAGO = {"gemini-3.1-flash-lite": (0.25, 1.50), "gemini-3.5-flash-lite": (0.30, 2.50),
+              "gemini-3.6-flash": (0.75, 3.75), "gemini-3.8-flash": (0.75, 3.75)}
 
 P = gerador_local.PERSONAGENS
 A = gerador_local.ARMAS
@@ -132,23 +136,25 @@ def montar_caso_texto(esq: dict, versao: str) -> str:
               "PISTAS (reescreva o texto; o fato não pode mudar):"]
     for p in esq["pistas"]:
         fatos = "; ".join(fato_em_palavras(f) for f in p["fatos"]) or "nenhum (clima)"
-        extra = f" | deve citar: {', '.join(deve_citar_pista(p)) or '-'}" if versao == "v2" else ""
+        extra = f" | deve citar: {', '.join(deve_citar_pista(p)) or '-'}" if versao != "v1" else ""
         linhas.append(f"- {p['id']} | {C[p['comodo']]['nome']} | fato: {fatos}{extra} | texto-base: \"{p['texto']}\"")
     linhas += ["", "RESPOSTAS DO INTERROGATÓRIO (reescreva no jeito de falar de cada um; verdade/mentira e fato não mudam):"]
     for s in esq["suspeitos"]:
         linhas.append(f"* {s} {P[s]['nome']} — jeito de falar: {P[s]['jeito_de_falar']}")
         for q, r in esq["respostas"][s].items():
             vm = "VERDADE" if r["verdade"] else "MENTIRA"
-            extra = f" | deve citar: {', '.join(deve_citar_resposta(r)) or '-'}" if versao == "v2" else ""
+            extra = f" | deve citar: {', '.join(deve_citar_resposta(r)) or '-'}" if versao != "v1" else ""
             linhas.append(f"  - {q} \"{PERG[q]}\" | {vm} | fato: {fato_em_palavras(r.get('fato'))}{extra} | texto-base: \"{r['texto']}\"")
     return "\n".join(linhas)
 
 
-def preparar(rng: random.Random, versao: str = "v2", evitar: dict | None = None) -> dict:
+def preparar(rng: random.Random, versao: str = "v3", evitar: dict | None = None,
+             injetar: str | None = None, filtrar: bool = True) -> dict:
     t0 = time.perf_counter()
     esq = gerador_local.gerar_caso(rng, evitar=evitar)
     t1 = time.perf_counter()
-    contexto = rag.contexto_do_caso(esq)
+    bloqueados = []
+    contexto = rag.contexto_do_caso(esq, injetar=injetar, filtrar=filtrar, bloqueados=bloqueados)
     t2 = time.perf_counter()
     ctx_txt = "\n\n".join(f"[{c['id']}] {c['texto']}" for c in contexto)
     modelo = (PROMPTS / f"{versao}.md").read_text(encoding="utf-8")
@@ -158,6 +164,7 @@ def preparar(rng: random.Random, versao: str = "v2", evitar: dict | None = None)
     prompt = pedido.strip().format(contexto=ctx_txt, caso=montar_caso_texto(esq, versao),
                                    proibidas=proibidas, correcoes="")
     return {"versao": versao, "esqueleto": esq, "contexto_ids": [c["id"] for c in contexto],
+            "bloqueados_no_rag": [c["id"] for c in bloqueados],
             "sistema": sistema, "prompt": prompt, "proibidas": proibidas,
             "ms": {"sorteio": round((t1 - t0) * 1000, 1), "rag": round((t2 - t1) * 1000, 1)}}
 
@@ -177,11 +184,11 @@ def _rebaixar(modelos: list[str], modelo: str) -> None:
         modelos.append(modelo)
 
 
-def chamar_gemini(sistema: str, prompt: str, chave: str, modelos: list[str]) -> dict:
+def chamar_gemini(sistema: str, prompt: str, chave: str, modelos: list[str], temperatura: float = 0.8) -> dict:
     corpo = json.dumps({
         "systemInstruction": {"parts": [{"text": sistema}]},
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {"responseMimeType": "application/json", "temperature": 0.8},
+        "generationConfig": {"responseMimeType": "application/json", "temperature": temperatura},
     }).encode("utf-8")
     ultimo = None
     for modelo in list(modelos):
@@ -243,6 +250,9 @@ def aplicar_textos(esq: dict, texto_ia: str) -> tuple[dict | None, list[str]]:
     titulo = str(ia.get("titulo", "")).strip()
     caso["titulo"] = (titulo + " na Mansão Valverde") if titulo and "Valverde" not in titulo else (titulo or esq["titulo"])
     caso["enredo"] = str(ia.get("enredo", "")).strip()
+    culpado = esq["solucao"]["culpado"]
+    if cita(primeiro_nome(culpado), caso["titulo"]):
+        erros.append(f"o título cita o culpado ({primeiro_nome(culpado)})")
     if not caso["enredo"]:
         erros.append("faltou o enredo")
     elif len(caso["enredo"].split()) > 140:
@@ -281,6 +291,10 @@ def aplicar_textos(esq: dict, texto_ia: str) -> tuple[dict | None, list[str]]:
                     erros.append(f"resposta {s}/{q} não cita {nome}")
             if len(t) > 260:
                 erros.append(f"resposta {s}/{q} longa demais ({len(t)} caracteres)")
+    textos = {"título": caso["titulo"], "enredo": caso["enredo"]}
+    textos.update({f"pista {p['id']}": p["texto"] for p in caso["pistas"]})
+    textos.update({f"resposta {s}/{q}": r["texto"] for s in caso["suspeitos"] for q, r in caso["respostas"][s].items()})
+    erros += seguranca.checar_saida(textos)
     return caso, erros
 
 
@@ -337,7 +351,7 @@ def gerar_um(rng, versao, chave, modelos, evitar=None, simular=False) -> dict:
             erros_1a = len(res["erros"])
         if res["aprovado"]:
             break
-        if versao == "v2":   # v2: a próxima tentativa recebe os erros
+        if versao != "v1":   # v2 e v3: a próxima tentativa recebe os erros
             lista = "\n".join(f"- {e}" for e in res["erros"][:15])
             prompt = prep["prompt"].replace("## Contexto (base de conhecimento)",
                                             f"## Correções da tentativa anterior (resolva todas)\n{lista}\n\n## Contexto (base de conhecimento)", 1)
@@ -356,7 +370,7 @@ def gerar_um(rng, versao, chave, modelos, evitar=None, simular=False) -> dict:
 def main():
     ap = argparse.ArgumentParser(description="Gera casos com IA (Gemini) e registra os resultados.")
     ap.add_argument("--casos", type=int, default=5)
-    ap.add_argument("--prompt", choices=["v1", "v2"], default="v2")
+    ap.add_argument("--prompt", choices=["v1", "v2", "v3"], default="v3")
     ap.add_argument("--semente", type=int, default=None)
     ap.add_argument("--simular", action="store_true", help="não chama a IA (teste do fluxo)")
     a = ap.parse_args()

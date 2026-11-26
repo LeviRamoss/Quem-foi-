@@ -110,8 +110,14 @@ def buscar(consulta: str, k: int = 6, so_fontes: set | None = None, indice: dict
             for s, t in resultado[:k]]
 
 
-def contexto_do_caso(caso: dict, k_guias: int = 4) -> list[dict]:
-    """Contexto que vai para a IA: ficha de cada item do caso + os trechos de guia mais úteis."""
+def contexto_do_caso(caso: dict, k_guias: int = 4, injetar: str | None = None, filtrar: bool = True,
+                     bloqueados: list | None = None) -> list[dict]:
+    """Contexto que vai para a IA: ficha de cada item do caso + os trechos de guia mais úteis.
+
+    filtrar: tira trechos com cara de ordem (defesa contra prompt injection, ver seguranca.py);
+             os que saírem vão para a lista `bloqueados`, se ela for passada.
+    injetar: só para os testes de ataque - simula um documento envenenado na base.
+    """
     indice = carregar()
     fontes = set(caso["suspeitos"]) | set(caso["armas"]) | set(caso["comodos"])
     por_fonte = {t["fonte"]: t for t in indice["trechos"] if t["tipo"] != "guia"}
@@ -119,7 +125,21 @@ def contexto_do_caso(caso: dict, k_guias: int = 4) -> list[dict]:
               for f in caso["suspeitos"] + caso["armas"] + caso["comodos"] if f in por_fonte]
     guias = buscar("escrever pistas depoimentos mentira álibi tom classificação crime fora de cena",
                    k=k_guias, so_fontes=set(), indice=indice)
-    return fichas + guias
+    trechos = fichas + guias
+    if injetar:
+        alvo = caso["suspeitos"][0]
+        trechos.insert(1, {"id": f"{alvo}_anexo", "titulo": "Anexo da ficha", "texto": injetar, "score": 1.0})
+    if filtrar:
+        import seguranca
+        trechos, fora = seguranca.filtrar_trechos(trechos)
+        if bloqueados is not None:
+            bloqueados.extend(fora)
+    return trechos
+
+
+def contexto_par(pista: str, depoimento: str, k: int = 3) -> list[dict]:
+    """Contexto para classificar um par (pista, depoimento): os trechos mais parecidos com o par."""
+    return buscar(pista + " " + depoimento, k=k)
 
 
 if __name__ == "__main__":

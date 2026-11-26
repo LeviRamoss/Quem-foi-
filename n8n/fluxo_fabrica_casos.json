@@ -46,7 +46,7 @@
         "url": "http://127.0.0.1:8765/preparar",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\"versao\": \"v2\"}",
+        "jsonBody": "={\"versao\": \"v3\"}",
         "options": {
           "timeout": 240000
         }

@@ -4,7 +4,7 @@ Rodar (deixe esta janela aberta):
     py fabrica/servidor.py
 
 Rotas (POST, corpo e resposta em JSON; cada etapa devolve tudo o que a próxima precisa):
-    /preparar   {"versao": "v2"}         -> sorteio do caso + contexto do RAG + prompt
+    /preparar   {"versao": "v3"}         -> sorteio do caso + contexto do RAG + prompt
     /ia         (saída de /preparar)     -> chama o Gemini (ou simula, se não houver chave)
     /validar    (saída de /ia)           -> aplica os textos e confere; prepara correções
     /registrar  (saída de /validar)      -> grava fabrica/registro.csv e salva o caso aprovado
@@ -32,7 +32,7 @@ RNG = random.Random()
 
 
 def preparar(corpo):
-    prep = pipeline.preparar(RNG, corpo.get("versao", "v2"))
+    prep = pipeline.preparar(RNG, corpo.get("versao", "v3"))
     prep.update({"tentativa": 0, "tokens_entrada": 0, "tokens_saida": 0, "ms_ia": 0, "ms_validar": 0,
                  "erros_na_1a": None, "inicio": time.time(), "prompt_atual": prep["prompt"]})
     return prep
@@ -59,7 +59,7 @@ def validar(corpo):
     corpo["erros"] = res["erros"]
     corpo["caso"] = res["caso"]
     corpo["pode_tentar_de_novo"] = (not res["aprovado"]) and corpo["tentativa"] < pipeline.MAX_TENTATIVAS
-    if corpo["pode_tentar_de_novo"] and corpo["versao"] == "v2":
+    if corpo["pode_tentar_de_novo"] and corpo["versao"] != "v1":
         lista = "\n".join(f"- {e}" for e in res["erros"][:15])
         corpo["prompt_atual"] = corpo["prompt"].replace(
             "## Contexto (base de conhecimento)",
