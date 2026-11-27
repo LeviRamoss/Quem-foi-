@@ -58,24 +58,43 @@ A IA nunca decide a lógica do caso: o código monta, a IA escreve, o validador 
 | `testes/` | Testes das regras e do gerador, [casos de teste da fábrica](docs/casos_de_teste.md) e [verificação de segredos](docs/verificacao_segredos.md) |
 | `docs/` | [Regras oficiais](docs/regras.md), [formato do caso](docs/formato_caso.md), [roteiro dos QAs](docs/roteiro_testes.md), [custos](docs/custos.md) e imagens |
 
-## Como instalar
+## Como instalar e jogar (passo a passo no Windows)
 
-1. Instale o **Python 3.10 ou mais novo** (python.org). No Windows, use `py` no lugar de `python` nos comandos abaixo.
-2. Baixe o repositório (**Code → Download ZIP**, ou `git clone https://github.com/LeviRamoss/Quem-foi-.git`).
-3. Na pasta do projeto, instale o que o jogo usa: `pip install pygame-ce`.
-4. Só para a fábrica com IA: crie o `.env` (veja abaixo). Ela usa só a biblioteca padrão do Python.
-5. Só para o fine-tuning: `pip install torch --index-url https://download.pytorch.org/whl/cpu` e `pip install transformers datasets accelerate scikit-learn pandas`.
+1. **Instale o Python** (3.10 ou mais novo) em [python.org/downloads](https://www.python.org/downloads/). Na primeira tela do instalador, marque **"Add python.exe to PATH"** e clique em **Install Now**.
+2. **Baixe o jogo:** nesta página do GitHub, clique no botão verde **Code** e depois em **Download ZIP**.
+3. **Extraia o arquivo:** clique com o botão direito no `Quem-foi--main.zip` que baixou e escolha **Extrair tudo...**. Abra a pasta extraída (a que tem `jogo`, `dados`, `fabrica` e este `README.md`).
+4. **Abra o terminal na pasta:** clique com o botão direito num espaço vazio dentro da pasta e escolha **Abrir no Terminal**. Se essa opção não aparecer, clique na barra de endereço da pasta, digite `cmd` e aperte Enter.
+5. **Instale a biblioteca do jogo** (só na primeira vez):
+
+   ```
+   py -m pip install pygame-ce
+   ```
+
+6. **Inicie o jogo:**
+
+   ```
+   py jogo/main.py
+   ```
+
+Na tela inicial, escolha de 1 a 3 jogadores, digite os nomes e comece. **F11** liga e desliga a tela cheia e **M** liga e desliga a música. Para jogar de novo outro dia, repita só os passos 4 e 6.
+
+O jogo não precisa de internet nem de chave de API: ele usa os casos já escritos pela IA (`dados/casos/ia/`) e, quando acabam, cria casos novos com o gerador local.
+
+### Para a fábrica de casos e o fine-tuning (opcional)
+
+- **Fábrica com IA:** crie o `.env` com a chave do Gemini (veja "Fábrica de casos com IA" abaixo). Ela usa só a biblioteca padrão do Python.
+- **Fine-tuning:** `py -m pip install torch --index-url https://download.pytorch.org/whl/cpu` e `py -m pip install transformers datasets accelerate scikit-learn pandas`.
 
 ## Como rodar
+
+No Linux e no Mac, troque `py` por `python3` nos comandos.
 
 ### Jogo
 
 ```bash
-pip install pygame-ce
-python jogo/main.py
+py -m pip install pygame-ce
+py jogo/main.py
 ```
-
-A janela se ajusta ao monitor. **F11** liga e desliga a tela cheia e **M** liga e desliga a música.
 
 ### Testes
 
