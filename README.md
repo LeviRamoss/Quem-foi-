@@ -78,7 +78,7 @@ A IA nunca decide a lógica do caso: o código monta, a IA escreve, o validador 
 
 Na tela inicial, escolha de 1 a 3 jogadores, digite os nomes e comece. **F11** liga e desliga a tela cheia e **M** liga e desliga a música. Para jogar de novo outro dia, repita só os passos 4 e 6.
 
-O jogo não precisa de internet nem de chave de API: ele usa os casos já escritos pela IA (`dados/casos/ia/`) e, quando acabam, cria casos novos com o gerador local.
+O jogo não precisa de internet : ele usa os casos já escritos pela IA (`dados/casos/ia/`) e, quando acabam, cria casos novos com o gerador local.
 
 ### Para a fábrica de casos e o fine-tuning (opcional)
 
