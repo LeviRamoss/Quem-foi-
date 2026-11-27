@@ -4,11 +4,11 @@ Jogo de dedução para PC em que a IA cria um caso novo a cada partida, e um val
 
 **Grupo Mentalistas** · Projeto de Inteligência Artificial
 
-| Nome completo | Matrícula |
+| Nome completo | 
 | --- | --- |
-| Levi Ramos Barbosa Santos | 241070993 |
-| Ana Luiza Lima Nicolodi | 241070906 |
-| Alisson Silva Nascimento | 241070766 |
+| Levi Ramos Barbosa Santos |
+| Ana Luiza Lima Nicolodi | 
+| Alisson Silva Nascimento | 
 
 ![Tela principal do jogo](docs/tela-quem-foi.png)
 
